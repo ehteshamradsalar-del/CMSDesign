@@ -24,6 +24,7 @@ interface FormState {
   techniques: string;
   materials: string;
   references: string;
+  personalnotes: string;
   keywords: string;
   themes: string;
   visibility: 'PUBLIC' | 'PRIVATE';
@@ -45,6 +46,7 @@ function emptyForm(): FormState {
     techniques: '',
     materials: '',
     references: '',
+    personalnotes: '',
     keywords: '',
     themes: '',
     visibility: 'PUBLIC',
@@ -98,6 +100,7 @@ export default function ArtworkFormPage() {
         techniques: arrayToCommaString(a.techniques),
         materials: arrayToCommaString(a.materials),
         references: arrayToCommaString(a.references),
+        personalnotes: arrayToCommaString(a.personalnotes),
         keywords: arrayToCommaString(a.keywords),
         themes: arrayToCommaString(a.themes),
         visibility: a.visibility ?? 'PUBLIC',
@@ -182,6 +185,7 @@ export default function ArtworkFormPage() {
       techniques: commaStringToArray(form.techniques),
       materials: commaStringToArray(form.materials),
       references: commaStringToArray(form.references),
+      personalnotes: commaStringToArray(form.personalnotes),
       keywords: commaStringToArray(form.keywords),
       themes: commaStringToArray(form.themes),
       visibility: form.visibility,
@@ -396,6 +400,15 @@ export default function ArtworkFormPage() {
                 placeholder="Morandi, Tuttle, Agnes Martin"
               />
             </Field>
+                      <Field label="personal notes">
+                          <input
+                              type="text"
+                              value={form.personalnotes}
+                              onChange={(e) => update('personalnotes', e.target.value)}
+                              className="field-input"
+                              placeholder="thoughts on the process"
+                          />
+                      </Field>
           </Section>
 
           {/* Group 3 — Keywords & themes */}
