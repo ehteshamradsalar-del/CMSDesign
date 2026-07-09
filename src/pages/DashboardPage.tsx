@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Pencil, ImageIcon, Lock, Globe } from 'lucide-react';
-import Sidebar from '../components/Sidebar';
-import ArtworkCard from '../components/ArtworkCard';
-import CollectionFormModal from '../components/CollectionFormModal';
-import ConfirmDialog from '../components/ConfirmDialog';
-import ErrorBanner from '../components/ErrorBanner';
+import Sidebar from '../components/navigation/Sidebar';
+import ArtworkCard from '../components/artwork/ArtworkCard';
+import CollectionFormModal from '../components/collections/CollectionFormModal';
+import ConfirmDialog from '../components/common/ConfirmDialog';
+import ErrorBanner from '../components/common/ErrorBanner';
 import { api, parseApiError } from '../lib/api';
 import type { Artwork, Collection } from '../lib/types';
 import { categoryLabel, formatYearRange } from '../lib/utils';

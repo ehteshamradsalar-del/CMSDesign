@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import AuthLayout from '../components/AuthLayout';
-import ErrorBanner from '../components/ErrorBanner';
-import GoogleButton from '../components/GoogleButton';
+import AuthLayout from '../layouts/AuthLayout';
+import ErrorBanner from '../components/common/ErrorBanner';
+import GoogleButton from '../components/common/GoogleButton';
 import { useAuth, parseApiError } from '../lib/auth';
 
 export default function LoginPage() {

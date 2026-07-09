@@ -1,6 +1,6 @@
 import { Minus, ImageIcon } from 'lucide-react';
-import type { Artwork } from '../lib/types';
-import { artworkSubtitle, classNames, mediaUrl, primaryMedia } from '../lib/utils';
+import type { Artwork } from '../../lib/types';
+import { artworkSubtitle, classNames, mediaUrl, primaryMedia } from '../../lib/utils';
 
 interface Props {
   artwork: Artwork;

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
-import CategoryCombobox from './CategoryCombobox';
-import ErrorBanner from './ErrorBanner';
-import { VISIBILITY_OPTIONS } from '../lib/constants';
-import { parseApiError } from '../lib/auth';
-import { api } from '../lib/api';
-import type { Collection, MediaCategory, Visibility } from '../lib/types';
+import CategoryCombobox from '../forms/CategoryCombobox';
+import ErrorBanner from '../common/ErrorBanner';
+import { VISIBILITY_OPTIONS } from '../../lib/constants';
+import { parseApiError } from '../../lib/auth';
+import { api } from '../../lib/api';
+import type { Collection, MediaCategory, Visibility } from '../../lib/types';
 
 interface Props {
   open: boolean;

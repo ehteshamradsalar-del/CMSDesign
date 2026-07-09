@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./lib/auth";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Header from "./components/Header";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import Header from "./components/navigation/Header";
 
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";

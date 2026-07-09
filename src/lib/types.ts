@@ -88,7 +88,8 @@ export interface Artwork {
   concepts?: string[];
   techniques?: string[];
   materials?: string[];
-  references?: string[];
+    references?: string[];
+    personalNotes?: string[];
 
   exhibitionHistory?: ExhibitionEntry[];
   publicationHistory?: PublicationEntry[];

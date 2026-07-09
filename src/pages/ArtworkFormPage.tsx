@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Upload, ImageIcon, X } from 'lucide-react';
-import ErrorBanner from '../components/ErrorBanner';
+import ErrorBanner from '../components/common/ErrorBanner';
 import { api, parseApiError } from '../lib/api';
 import { AVAILABILITY_OPTIONS, VISIBILITY_OPTIONS } from '../lib/constants';
 import {
@@ -100,7 +100,7 @@ export default function ArtworkFormPage() {
         techniques: arrayToCommaString(a.techniques),
         materials: arrayToCommaString(a.materials),
         references: arrayToCommaString(a.references),
-        personalnotes: arrayToCommaString(a.personalnotes),
+        personalNotes: a.personalNotes || '',
         keywords: arrayToCommaString(a.keywords),
         themes: arrayToCommaString(a.themes),
         visibility: a.visibility ?? 'PUBLIC',
@@ -185,7 +185,7 @@ export default function ArtworkFormPage() {
       techniques: commaStringToArray(form.techniques),
       materials: commaStringToArray(form.materials),
       references: commaStringToArray(form.references),
-      personalnotes: commaStringToArray(form.personalnotes),
+      personalNotes: a.personalNotes || '',
       keywords: commaStringToArray(form.keywords),
       themes: commaStringToArray(form.themes),
       visibility: form.visibility,

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Pencil, Trash2, Plus, FolderOpen, Archive } from 'lucide-react';
-import { useAuth } from '../lib/auth';
-import { groupCollectionsByCategory } from '../lib/utils';
-import type { Collection } from '../lib/types';
+import { useAuth } from '../../lib/auth';
+import { groupCollectionsByCategory } from '../../lib/utils';
+import type { Collection } from '../../lib/types';
 
 interface Props {
   collections: Collection[];
