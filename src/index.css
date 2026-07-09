@@ -1,0 +1,104 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-ink-50 text-ink-900 font-sans antialiased;
+    font-feature-settings: 'ss01', 'cv01';
+  }
+
+  ::selection {
+    @apply bg-ink-900 text-ink-50;
+  }
+
+  /* Refined scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-ink-200 rounded-full border-2 border-solid border-transparent bg-clip-content;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-300;
+  }
+}
+
+@layer components {
+  .field-label {
+    @apply block text-[11px] font-medium uppercase tracking-widest text-ink-500 mb-2;
+  }
+
+  .field-input {
+    @apply w-full rounded-sm border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-900 placeholder:text-ink-400 transition-colors duration-200 focus:border-ink-900 focus:outline-none focus:ring-0;
+  }
+
+  .field-input:hover {
+    @apply border-ink-300;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-ink-900 px-5 py-2.5 text-sm font-medium text-ink-50 transition-all duration-200 hover:bg-ink-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm border border-ink-300 bg-transparent px-5 py-2.5 text-sm font-medium text-ink-800 transition-all duration-200 hover:border-ink-900 hover:bg-ink-100 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm px-3 py-2 text-sm font-medium text-ink-600 transition-colors duration-200 hover:bg-ink-100 hover:text-ink-900;
+  }
+
+  .icon-btn {
+    @apply inline-flex h-7 w-7 items-center justify-center rounded-sm text-ink-400 transition-all duration-200 hover:bg-ink-100 hover:text-ink-900;
+  }
+
+  .icon-btn-danger {
+    @apply inline-flex h-7 w-7 items-center justify-center rounded-sm text-ink-400 transition-all duration-200 hover:bg-red-50 hover:text-red-600;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .fade-in {
+    animation: fadeIn 0.4s ease-smooth both;
+  }
+  .fade-in-up {
+    animation: fadeInUp 0.5s ease-smooth both;
+  }
+  .stagger > * {
+    animation: fadeInUp 0.5s ease-smooth both;
+  }
+  .stagger > *:nth-child(1) { animation-delay: 0.02s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.06s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.1s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.14s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.18s; }
+  .stagger > *:nth-child(6) { animation-delay: 0.22s; }
+  .stagger > *:nth-child(7) { animation-delay: 0.26s; }
+  .stagger > *:nth-child(8) { animation-delay: 0.3s; }
+  .stagger > *:nth-child(9) { animation-delay: 0.34s; }
+  .stagger > *:nth-child(n+10) { animation-delay: 0.38s; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
