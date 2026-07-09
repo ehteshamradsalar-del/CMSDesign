@@ -24,7 +24,7 @@ interface FormState {
   techniques: string;
   materials: string;
   references: string;
-  personalnotes: string;
+  personalNotes: string;
   keywords: string;
   themes: string;
   visibility: 'PUBLIC' | 'PRIVATE';
@@ -46,7 +46,7 @@ function emptyForm(): FormState {
     techniques: '',
     materials: '',
     references: '',
-    personalnotes: '',
+    personalNotes: '',
     keywords: '',
     themes: '',
     visibility: 'PUBLIC',
@@ -185,7 +185,7 @@ export default function ArtworkFormPage() {
       techniques: commaStringToArray(form.techniques),
       materials: commaStringToArray(form.materials),
       references: commaStringToArray(form.references),
-      personalNotes: a.personalNotes || '',
+      personalNotes: form.personalNotes.trim() || null,
       keywords: commaStringToArray(form.keywords),
       themes: commaStringToArray(form.themes),
       visibility: form.visibility,
@@ -403,8 +403,8 @@ export default function ArtworkFormPage() {
                       <Field label="personal notes">
                           <input
                               type="text"
-                              value={form.personalnotes}
-                              onChange={(e) => update('personalnotes', e.target.value)}
+                              value={form.personalNotes}
+                              onChange={(e) => update('personalNotes', e.target.value)}
                               className="field-input"
                               placeholder="thoughts on the process"
                           />

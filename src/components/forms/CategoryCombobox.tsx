@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Check, ChevronDown } from 'lucide-react';
-import { MEDIA_CATEGORIES } from '../lib/constants';
-import type { MediaCategory } from '../lib/types';
-import { classNames } from '../lib/utils';
+import { MEDIA_CATEGORIES } from '../../lib/constants';
+import type { MediaCategory } from '../../lib/types';
+import { classNames } from '../../lib/utils';
 
 interface Props {
   value: MediaCategory | null;
