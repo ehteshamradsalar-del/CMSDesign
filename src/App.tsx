@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./lib/auth";
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import Header from "./components/navigation/Header";
+import PublicLayout from "./layouts/PublicLayout";
 
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -12,14 +12,19 @@ function App() {
     return (
         <AuthProvider>
             <BrowserRouter>
-                <Header />
-
                 <Routes>
-                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    {/* Public routes — nothing built here yet beyond the redirect,
+              but any future Home/Portfolio/About/Contact page goes inside
+              this PublicLayout wrapper so Header only shows here. */}
+                    <Route element={<PublicLayout />}>
+                        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    </Route>
 
+                    {/* Auth routes — no Header, no Sidebar */}
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
 
+                    {/* Dashboard routes — Sidebar lives inside DashboardPage itself */}
                     <Route
                         path="/dashboard"
                         element={
@@ -28,7 +33,6 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
-
                     <Route
                         path="/artworks/new"
                         element={
@@ -37,7 +41,6 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
-
                     <Route
                         path="/artworks/:id/edit"
                         element={
