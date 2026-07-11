@@ -41,8 +41,9 @@ export interface User {
 }
 
 export interface AuthResponse {
-  token: string;
-  user: User;
+    token: string;
+    refreshToken: string;
+    user: User;
 }
 
 export interface ExhibitionEntry {
