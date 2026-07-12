@@ -4,59 +4,78 @@ import { Link, NavLink } from "react-router-dom";
 export default function Header() {
     return (
         <header className="header">
-            {/* Left */}
-            <Link to="/" className="logo">
-                {/* Replace with your logo image if desired */}
-                <span className="logo-text">Salar Ehtesham Rad</span>
-            </Link>
+            <div className="header-container">
 
-            {/* Center */}
-            <nav className="nav">
-                <NavLink
-                    to="/dashboard"
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                >
-                    Dashboard
-                </NavLink>
+                {/* Logo */}
+                <Link to="/" className="logo">
 
-                <NavLink
-                    to="/portfolio"
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                >
-                    Portfolio
-                </NavLink>
+                    {/* Logo sample */}
+                    <div className="logo-mark">
+                        A
+                    </div>
 
-                <NavLink
-                    to="/artworks/new"
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                >
-                    New Artwork
-                </NavLink>
+                    <div className="logo-content">
+                        <span className="logo-title">
+                            ArtCMS
+                        </span>
 
-                <NavLink
-                    to="/about"
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                >
-                    About
-                </NavLink>
+                        <span className="logo-subtitle">
+                            AI Collection Platform
+                        </span>
+                    </div>
+                </Link>
 
-                <NavLink
-                    to="/contact"
-                    className={({ isActive }) => (isActive ? "active" : "")}
-                >
-                    Contact
-                </NavLink>
-            </nav>
+                {/* Navigation */}
+                <nav className="nav">
 
-            {/* Right */}
-            <div className="header-right">
-                <button className="login-btn">
-                    Login
-                </button>
+                    <NavLink to="/features">
+                        Features
+                    </NavLink>
 
-                <button className="menu-btn" aria-label="Open navigation">
-                    ☰
-                </button>
+                    <NavLink to="/solutions">
+                        Solutions
+                    </NavLink>
+
+                    <NavLink to="/pricing">
+                        Pricing
+                    </NavLink>
+
+                    <NavLink to="/about">
+                        About
+                    </NavLink>
+
+                    <NavLink to="/contact">
+                        Contact
+                    </NavLink>
+
+                </nav>
+
+                {/* Right Side */}
+                <div className="header-actions">
+
+                    <Link
+                        to="/login"
+                        className="login-button"
+                    >
+                        Log in
+                    </Link>
+
+                    <Link
+                        to="/signup"
+                        className="primary-button"
+                    >
+                        Start Free
+                    </Link>
+
+                    <button
+                        className="menu-button"
+                        aria-label="Open menu"
+                    >
+                        ☰
+                    </button>
+
+                </div>
+
             </div>
         </header>
     );

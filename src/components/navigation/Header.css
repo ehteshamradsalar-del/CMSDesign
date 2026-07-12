@@ -1,5 +1,5 @@
 /* ===========================================
-   Root Header
+   Header
 =========================================== */
 
 .header {
@@ -7,15 +7,25 @@
     top: 0;
     z-index: 1000;
     display: flex;
+    justify-content: center;
+    width: 100%;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    background: rgba(255,255,255,.82);
+    border-bottom: 1px solid rgba(0,0,0,.05);
+}
+
+/* ===========================================
+   Container
+=========================================== */
+
+.header-container {
+    width: min(1400px, 100%);
+    height: 74px;
+    display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    height: 72px;
-    padding: 0 48px;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 0 40px;
     box-sizing: border-box;
 }
 
@@ -24,17 +34,36 @@
 =========================================== */
 
 .logo {
-    text-decoration: none;
-    color: inherit;
     display: flex;
     align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: inherit;
+    flex-shrink: 0;
 }
 
-.logo-text {
-    font-size: 1.35rem;
+.logo-image {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+}
+
+.logo-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-title {
+    font-size: 1.15rem;
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -.02em;
     color: #111;
+}
+
+.logo-subtitle {
+    font-size: .75rem;
+    color: #777;
+    margin-top: 2px;
 }
 
 /* ===========================================
@@ -44,23 +73,21 @@
 .nav {
     display: flex;
     align-items: center;
-    gap: 42px;
+    gap: 32px;
 }
 
     .nav a {
         position: relative;
         text-decoration: none;
-        color: #222;
-        font-size: 15px;
+        color: #333;
+        font-size: .95rem;
         font-weight: 500;
-        transition: color .25s ease;
+        transition: .25s;
     }
 
         .nav a:hover {
-            color: #777;
+            color: #000;
         }
-
-        /* underline animation */
 
         .nav a::after {
             content: "";
@@ -79,36 +106,46 @@
         }
 
 /* ===========================================
-   Right Side
+   Actions
 =========================================== */
 
-.header-right {
+.header-actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
 }
 
-.login-btn {
-    border: 1px solid #111;
-    background: transparent;
-    padding: 10px 18px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: 14px;
+.login-button {
+    text-decoration: none;
+    color: #222;
     font-weight: 500;
+    transition: .2s;
+}
+
+    .login-button:hover {
+        color: #000;
+    }
+
+.primary-button {
+    padding: 11px 22px;
+    border-radius: 999px;
+    text-decoration: none;
+    background: #111;
+    color: white;
+    font-weight: 600;
     transition: .25s;
 }
 
-    .login-btn:hover {
-        background: #111;
-        color: white;
+    .primary-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(0,0,0,.12);
     }
 
 /* ===========================================
-   Mobile Menu Button
+   Mobile Menu
 =========================================== */
 
-.menu-btn {
+.menu-button {
     display: none;
     border: none;
     background: transparent;
@@ -120,33 +157,44 @@
    Responsive
 =========================================== */
 
-@media (max-width: 992px) {
-
-    .header {
-        padding: 0 32px;
-    }
+@media (max-width: 1100px) {
 
     .nav {
-        gap: 26px;
+        gap: 24px;
+    }
+
+    .header-container {
+        padding: 0 28px;
     }
 }
 
-@media (max-width: 768px) {
-
-    .header {
-        height: 64px;
-        padding: 0 20px;
-    }
+@media (max-width: 850px) {
 
     .nav {
         display: none;
     }
 
-    .menu-btn {
+    .login-button,
+    .primary-button {
+        display: none;
+    }
+
+    .menu-button {
         display: block;
     }
 
-    .login-btn {
+    .header-container {
+        height: 68px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .logo-subtitle {
         display: none;
+    }
+
+    .header-container {
+        padding: 0 18px;
     }
 }

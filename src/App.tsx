@@ -3,6 +3,7 @@ import { AuthProvider } from "./lib/auth";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
 
+import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -13,18 +14,17 @@ function App() {
         <AuthProvider>
             <BrowserRouter>
                 <Routes>
-                    {/* Public routes — nothing built here yet beyond the redirect,
-              but any future Home/Portfolio/About/Contact page goes inside
-              this PublicLayout wrapper so Header only shows here. */}
+
+                    {/* Public pages */}
                     <Route element={<PublicLayout />}>
-                        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="/" element={<HomePage />} />
                     </Route>
 
-                    {/* Auth routes — no Header, no Sidebar */}
+                    {/* Authentication */}
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
 
-                    {/* Dashboard routes — Sidebar lives inside DashboardPage itself */}
+                    {/* Protected dashboard */}
                     <Route
                         path="/dashboard"
                         element={
@@ -33,6 +33,7 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
+
                     <Route
                         path="/artworks/new"
                         element={
@@ -41,6 +42,7 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
+
                     <Route
                         path="/artworks/:id/edit"
                         element={
@@ -50,7 +52,9 @@ function App() {
                         }
                     />
 
-                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                    {/* fallback */}
+                    <Route path="*" element={<Navigate to="/" replace />} />
+
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
