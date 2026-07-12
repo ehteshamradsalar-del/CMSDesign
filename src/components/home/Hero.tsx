@@ -1,4 +1,8 @@
+import { useNavigate } from 'react-router-dom';
+
 export default function Hero() {
+    const navigate = useNavigate();
+
     return (
         <section className="hero">
 
@@ -25,11 +29,17 @@ export default function Hero() {
 
                 <div className="hero-buttons">
 
-                    <button className="primary-btn">
+                    <button
+                        className="primary-btn"
+                        onClick={() => navigate('/signup')}
+                    >
                         Start Free
                     </button>
 
-                    <button className="secondary-btn">
+                    <button
+                        className="secondary-btn"
+                        onClick={() => navigate('/login')}
+                    >
                         Book Demo
                     </button>
 
@@ -42,9 +52,9 @@ export default function Hero() {
 
                 <div className="preview-window">
 
-                    <div className="preview-main">
+                    <div className="preview-image"></div>
 
-                        <div className="preview-image"></div>
+                    <div className="preview-main">
 
                         <div className="preview-lines">
                             <span></span>

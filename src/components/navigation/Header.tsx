@@ -1,15 +1,18 @@
 import "./Header.css";
 import { Link, NavLink } from "react-router-dom";
+import { useState } from "react";
 
 export default function Header() {
+    const [menuOpen, setMenuOpen] = useState(false);
+
     return (
         <header className="header">
+
             <div className="header-container">
 
                 {/* Logo */}
                 <Link to="/" className="logo">
 
-                    {/* Logo sample */}
                     <div className="logo-mark">
                         A
                     </div>
@@ -28,24 +31,16 @@ export default function Header() {
                 {/* Navigation */}
                 <nav className="nav">
 
-                    <NavLink to="/features">
+                    <NavLink to="/#features">
                         Features
                     </NavLink>
 
-                    <NavLink to="/solutions">
-                        Solutions
+                    <NavLink to="/#comparison">
+                        Why Us
                     </NavLink>
 
-                    <NavLink to="/pricing">
-                        Pricing
-                    </NavLink>
-
-                    <NavLink to="/about">
-                        About
-                    </NavLink>
-
-                    <NavLink to="/contact">
-                        Contact
+                    <NavLink to="/#archive">
+                        Archive
                     </NavLink>
 
                 </nav>
@@ -70,6 +65,7 @@ export default function Header() {
                     <button
                         className="menu-button"
                         aria-label="Open menu"
+                        onClick={() => setMenuOpen(!menuOpen)}
                     >
                         ☰
                     </button>
@@ -77,6 +73,53 @@ export default function Header() {
                 </div>
 
             </div>
+
+            {/* Mobile Menu */}
+            {menuOpen && (
+                <div className="mobile-menu">
+
+                    <NavLink
+                        to="/#features"
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        Features
+                    </NavLink>
+
+                    <NavLink
+                        to="/#comparison"
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        Why Us
+                    </NavLink>
+
+                    <NavLink
+                        to="/#archive"
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        Archive
+                    </NavLink>
+
+                    <div className="mobile-menu-divider"></div>
+
+                    <Link
+                        to="/login"
+                        className="mobile-menu-link"
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        Log in
+                    </Link>
+
+                    <Link
+                        to="/signup"
+                        className="primary-button mobile-menu-cta"
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        Start Free
+                    </Link>
+
+                </div>
+            )}
+
         </header>
     );
 }

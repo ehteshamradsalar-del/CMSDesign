@@ -33,7 +33,7 @@ const FEATURES = [
 
 export default function Features() {
     return (
-        <section className="features">
+        <section className="features" id="features">
             <div className="features-header">
                 <span className="section-tag">What you get</span>
                 <h2>Built around how artists actually work</h2>

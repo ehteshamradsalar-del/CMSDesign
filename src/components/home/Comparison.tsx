@@ -19,7 +19,7 @@ function Cell({ value }: { value: boolean }) {
 
 export default function Comparison() {
     return (
-        <section className="comparison">
+        <section className="comparison" id="comparison">
             <div className="comparison-header">
                 <span className="section-tag">Why this, not that</span>
                 <h2>Not another website builder.</h2>
