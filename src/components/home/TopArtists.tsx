@@ -40,6 +40,7 @@ export default function TopArtists() {
     return (
         <section className="from-archive" id="archive">
             <div className="from-archive-header">
+                <span className="section-number">03 /</span>
                 <span className="section-tag">From the archive</span>
                 <h2>Recently added public work</h2>
             </div>

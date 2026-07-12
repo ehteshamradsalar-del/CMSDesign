@@ -21,6 +21,7 @@ export default function Comparison() {
     return (
         <section className="comparison" id="comparison">
             <div className="comparison-header">
+                <span className="section-number">02 /</span>
                 <span className="section-tag">Why this, not that</span>
                 <h2>Not another website builder.</h2>
                 <p>

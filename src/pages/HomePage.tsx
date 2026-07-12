@@ -11,9 +11,9 @@ export default function HomePage() {
     return (
         <main className="home">
             <Hero />
+            <AICurator />
             <Stats />
             <Features />
-            <AICurator />
             <Comparison />
             <TopArtists />
             <CTA />

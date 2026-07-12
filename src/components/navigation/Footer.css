@@ -1,7 +1,8 @@
 .site-footer {
-    background: #111;
-    color: #eee;
-    padding: 60px 8% 30px;
+    background: #1c1917;
+    color: #fafaf9;
+    padding: 64px 8% 32px;
+    font-family: 'Inter', system-ui, sans-serif;
 }
 
 .footer-top {
@@ -11,7 +12,7 @@
     flex-wrap: wrap;
     gap: 40px;
     padding-bottom: 40px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-brand {
@@ -19,17 +20,19 @@
 }
 
 .footer-logo {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 600;
     letter-spacing: -0.02em;
     display: block;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
+    color: #fafaf9;
 }
 
 .footer-brand p {
     font-size: 0.85rem;
     line-height: 1.7;
-    color: #aaa;
+    color: #a8a29e;
 }
 
 .footer-links {
@@ -39,19 +42,24 @@
 
     .footer-links a {
         font-size: 0.85rem;
-        color: #ccc;
+        color: #a8a29e;
         text-decoration: none;
-        transition: color 0.2s ease;
+        transition: color 0.25s ease;
     }
 
         .footer-links a:hover {
-            color: #fff;
+            color: var(--accent-terracotta);
         }
 
 .footer-bottom {
     padding-top: 24px;
     font-size: 0.78rem;
-    color: #888;
+    color: #78716c;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 @media (max-width: 700px) {

@@ -10,6 +10,7 @@ export default function AICurator() {
     return (
         <section className="ai-curator">
             <div className="ai-curator-content">
+                <span className="section-number" style={{ color: '#78716c' }}>00 /</span>
                 <span className="section-tag">Semantic search</span>
                 <h2>
                     Search your archive the way you
