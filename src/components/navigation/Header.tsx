@@ -39,7 +39,7 @@ export default function Header() {
                         Why Us
                     </NavLink>
 
-                    <NavLink to="/#archive">
+                    <NavLink to="/archive">
                         Archive
                     </NavLink>
 
@@ -93,7 +93,7 @@ export default function Header() {
                     </NavLink>
 
                     <NavLink
-                        to="/#archive"
+                        to="/archive"
                         onClick={() => setMenuOpen(false)}
                     >
                         Archive

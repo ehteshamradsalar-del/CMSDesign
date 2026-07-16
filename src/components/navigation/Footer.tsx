@@ -10,7 +10,7 @@ export default function Footer() {
                 <div className="footer-brand">
                     <span className="footer-logo">Archive</span>
                     <p>
-                        A structured home for your work \u2014 owned by you, searchable by
+                        A structured home for your work — owned by you, searchable by
                         everyone you choose.
                     </p>
                 </div>
@@ -18,10 +18,8 @@ export default function Footer() {
                 <nav className="footer-links">
                     <Link to="/login">Log in</Link>
                     <Link to="/signup">Sign up</Link>
+                    <Link to="/archive">Archive</Link>
                 </nav>
-
-                {/* Terms of Service and Privacy Policy links belong here once
-                    those pages actually exist \u2014 see Risks & Open Questions. */}
             </div>
 
             <div className="footer-bottom">

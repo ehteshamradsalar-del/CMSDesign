@@ -1,6 +1,6 @@
 .site-footer {
-    background: #1c1917;
-    color: #fafaf9;
+    background: #273C35;
+    color: #fafafa;
     padding: 64px 8% 32px;
     font-family: 'Inter', system-ui, sans-serif;
 }
@@ -26,13 +26,13 @@
     letter-spacing: -0.02em;
     display: block;
     margin-bottom: 14px;
-    color: #fafaf9;
+    color: #BF8E40;
 }
 
 .footer-brand p {
     font-size: 0.85rem;
     line-height: 1.7;
-    color: #a8a29e;
+    color: rgba(255, 255, 255, 0.65);
 }
 
 .footer-links {
@@ -42,19 +42,19 @@
 
     .footer-links a {
         font-size: 0.85rem;
-        color: #a8a29e;
+        color: rgba(255, 255, 255, 0.65);
         text-decoration: none;
         transition: color 0.25s ease;
     }
 
         .footer-links a:hover {
-            color: var(--accent-terracotta);
+            color: #BF8E40;
         }
 
 .footer-bottom {
     padding-top: 24px;
     font-size: 0.78rem;
-    color: #78716c;
+    color: rgba(255, 255, 255, 0.4);
     display: flex;
     align-items: center;
     justify-content: space-between;

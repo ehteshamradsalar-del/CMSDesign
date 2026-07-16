@@ -3,6 +3,48 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Neutral */
+    --ink-900: #111111;
+    --ink-700: #555555;
+    --ink-500: #777777;
+    --ink-300: #dddddd;
+    --ink-100: #eeeeee;
+    --ink-50: #fafafa;
+    --white: #ffffff;
+
+    /* Brand */
+    --brand-forest: #273C35;
+    --brand-gold: #BF8E40;
+
+    /* Semantic */
+    --color-success: #3F6B4F;
+    --color-warning: #B8863D;
+    --color-error: #9B3B3B;
+    --color-info: #4A5B68;
+
+    /* Radius */
+    --radius-default: 2px;
+    --radius-pill: 999px;
+
+    /* Spacing scale */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
+    --space-9: 96px;
+    --space-10: 128px;
+
+    /* Motion */
+    --duration-micro: 150ms;
+    --duration-standard: 250ms;
+    --duration-page: 400ms;
+  }
+
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -15,7 +57,7 @@
   }
 
   ::selection {
-    @apply bg-ink-900 text-ink-50;
+    @apply bg-brand-gold text-ink-900;
   }
 
   /* Refined scrollbar */
@@ -27,44 +69,87 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-ink-200 rounded-full border-2 border-solid border-transparent bg-clip-content;
+    @apply bg-ink-200 rounded-pill border-2 border-solid border-transparent bg-clip-content;
   }
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-ink-300;
+  }
+
+  /* Visible focus ring — brand-gold, never removed */
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-gold ring-offset-2 ring-offset-white;
   }
 }
 
 @layer components {
   .field-label {
-    @apply block text-[11px] font-medium uppercase tracking-widest text-ink-500 mb-2;
+    @apply block text-[11px] font-medium uppercase tracking-label text-ink-500 mb-2;
   }
 
   .field-input {
-    @apply w-full rounded-sm border border-ink-200 bg-white px-3.5 py-2.5 text-sm text-ink-900 placeholder:text-ink-400 transition-colors duration-200 focus:border-ink-900 focus:outline-none focus:ring-0;
+    @apply w-full rounded-sm border border-ink-300 bg-white px-3.5 py-2.5 text-sm text-ink-900 placeholder:text-ink-500 transition-colors duration-standard ease-out focus:border-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold/30;
   }
 
   .field-input:hover {
-    @apply border-ink-300;
+    @apply border-ink-500;
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-ink-900 px-5 py-2.5 text-sm font-medium text-ink-50 transition-all duration-200 hover:bg-ink-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-brand-gold px-5 py-2.5 text-sm font-medium text-ink-900 transition-all duration-standard ease-out hover:bg-brand-gold-dark active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-sm border border-ink-300 bg-transparent px-5 py-2.5 text-sm font-medium text-ink-800 transition-all duration-200 hover:border-ink-900 hover:bg-ink-100 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-sm border border-ink-300 bg-transparent px-5 py-2.5 text-sm font-medium text-ink-900 transition-all duration-standard ease-out hover:border-ink-900 hover:bg-ink-50 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-sm px-3 py-2 text-sm font-medium text-ink-600 transition-colors duration-200 hover:bg-ink-100 hover:text-ink-900;
+    @apply inline-flex items-center justify-center gap-2 rounded-sm px-3 py-2 text-sm font-medium text-ink-600 transition-colors duration-standard ease-out hover:bg-ink-100 hover:text-ink-900;
+  }
+
+  .btn-forest {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-brand-forest px-5 py-2.5 text-sm font-medium text-white transition-all duration-standard ease-out hover:bg-brand-forest-light active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .icon-btn {
-    @apply inline-flex h-7 w-7 items-center justify-center rounded-sm text-ink-400 transition-all duration-200 hover:bg-ink-100 hover:text-ink-900;
+    @apply inline-flex h-7 w-7 items-center justify-center rounded-sm text-ink-500 transition-all duration-standard ease-out hover:bg-ink-100 hover:text-ink-900;
   }
 
   .icon-btn-danger {
-    @apply inline-flex h-7 w-7 items-center justify-center rounded-sm text-ink-400 transition-all duration-200 hover:bg-red-50 hover:text-red-600;
+    @apply inline-flex h-7 w-7 items-center justify-center rounded-sm text-ink-500 transition-all duration-standard ease-out hover:bg-error/10 hover:text-error;
+  }
+
+  .tag-chip {
+    @apply inline-block rounded-pill bg-ink-50 px-3 py-1 text-[0.78rem] text-ink-700 transition-colors duration-standard;
+  }
+
+  .tag-chip-active {
+    @apply inline-block rounded-pill bg-brand-gold/15 px-3 py-1 text-[0.78rem] text-brand-gold-dark transition-colors duration-standard;
+  }
+
+  .section-tag {
+    @apply inline-block text-[11px] font-medium uppercase tracking-label text-ink-500;
+  }
+
+  .section-number {
+    @apply font-mono text-[11px] font-normal text-ink-500 tracking-normal;
+  }
+
+  .nav-link {
+    @apply relative text-sm font-medium text-ink-700 transition-colors duration-standard ease-out hover:text-ink-900;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute left-0 -bottom-2 h-0.5 w-0 bg-brand-gold transition-all duration-standard ease-out;
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    @apply w-full;
+  }
+
+  .nav-link.active {
+    @apply text-ink-900;
   }
 }
 
@@ -73,13 +158,13 @@
     text-wrap: balance;
   }
   .fade-in {
-    animation: fadeIn 0.4s ease-smooth both;
+    animation: fadeIn var(--duration-standard) ease-out both;
   }
   .fade-in-up {
-    animation: fadeInUp 0.5s ease-smooth both;
+    animation: fadeInUp var(--duration-page) ease-out both;
   }
   .stagger > * {
-    animation: fadeInUp 0.5s ease-smooth both;
+    animation: fadeInUp var(--duration-page) ease-out both;
   }
   .stagger > *:nth-child(1) { animation-delay: 0.02s; }
   .stagger > *:nth-child(2) { animation-delay: 0.06s; }
@@ -101,4 +186,14 @@
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -4,6 +4,8 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
 
 import HomePage from "./pages/HomePage";
+import ArchivePage from "./pages/ArchivePage";
+import ArtworkDetailPage from "./pages/ArtworkDetailPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -18,6 +20,8 @@ function App() {
                     {/* Public pages */}
                     <Route element={<PublicLayout />}>
                         <Route path="/" element={<HomePage />} />
+                        <Route path="/archive" element={<ArchivePage />} />
+                        <Route path="/artworks/:id" element={<ArtworkDetailPage />} />
                     </Route>
 
                     {/* Authentication */}
