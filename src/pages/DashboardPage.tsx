@@ -1,17 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Pencil, ImageIcon, Lock, Globe } from 'lucide-react';
+import { Plus, Pencil, Image as ImageIcon, Lock, Globe } from 'lucide-react';
 import Sidebar from '../components/navigation/Sidebar';
 import ArtworkCard from '../components/artwork/ArtworkCard';
 import CollectionFormModal from '../components/collections/CollectionFormModal';
 import ConfirmDialog from '../components/common/ConfirmDialog';
 import ErrorBanner from '../components/common/ErrorBanner';
 import { api, parseApiError } from '../lib/api';
-import type { Artwork, Collection } from '../lib/types';
-import { categoryLabel, formatYearRange } from '../lib/utils';
+import { useCategoryLabel, useFormatYearRange } from '../lib/utils';
+import { useLang } from '../lib/i18n';
+import type { Artwork, Collection, MediaCategory } from '../lib/types';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
+  const { t } = useLang();
+  const categoryLabel = useCategoryLabel();
+  const formatYearRange = useFormatYearRange();
+
   const [collections, setCollections] = useState<Collection[]>([]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,11 +41,11 @@ export default function DashboardPage() {
         return list[0]?.id ?? null;
       });
     } catch (err) {
-      setError(parseApiError(err, 'Could not load your collections.'));
+      setError(parseApiError(err, t('dash.errorLoadCollections')));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     loadCollections();
@@ -81,7 +86,7 @@ export default function DashboardPage() {
       setConfirmCollection(null);
     } catch (err) {
       setConfirmCollection(null);
-      setError(parseApiError(err, 'Could not delete this collection.'));
+      setError(parseApiError(err, t('dash.errorDeleteCollection')));
     } finally {
       setDeleting(false);
     }
@@ -100,7 +105,7 @@ export default function DashboardPage() {
       setConfirmArtwork(null);
     } catch (err) {
       setConfirmArtwork(null);
-      setError(parseApiError(err, 'Could not delete this artwork.'));
+      setError(parseApiError(err, t('dash.errorDeleteArtwork')));
     } finally {
       setDeleting(false);
     }
@@ -108,7 +113,6 @@ export default function DashboardPage() {
 
   return (
     <div className="flex h-screen overflow-hidden bg-ink-50">
-      {/* Sidebar — fixed on desktop, drawer on mobile */}
       <div className="hidden w-72 flex-shrink-0 md:flex">
         <Sidebar
           collections={collections}
@@ -120,18 +124,17 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* Main content */}
       <main className="flex-1 overflow-y-auto">
         <div className="mx-auto max-w-6xl px-6 py-10 sm:px-10 lg:px-14">
           {loading ? (
             <div className="flex h-96 items-center justify-center">
-              <div className="text-[11px] uppercase tracking-widest text-ink-400">Loading</div>
+              <div className="text-[11px] uppercase tracking-widest text-ink-400">{t('dash.loading')}</div>
             </div>
           ) : error ? (
             <div className="max-w-xl">
               <ErrorBanner message={error} />
               <button onClick={loadCollections} className="btn-secondary mt-4">
-                Try again
+                {t('dash.tryAgain')}
               </button>
             </div>
           ) : !selected ? (
@@ -139,6 +142,8 @@ export default function DashboardPage() {
           ) : (
             <CollectionDetail
               collection={selected}
+              categoryLabel={categoryLabel}
+              formatYearRange={formatYearRange}
               onEdit={() => handleEditCollection(selected)}
               onAddArtwork={() => navigate(`/artworks/new?collectionId=${selected.id}`)}
               onArtworkClick={(a) => navigate(`/artworks/${a.id}/edit`)}
@@ -157,13 +162,16 @@ export default function DashboardPage() {
 
       <ConfirmDialog
         open={confirmCollection !== null}
-        title="Delete collection"
+        title={t('dash.deleteCollection')}
         message={
           confirmCollection
-            ? `“${confirmCollection.name}” and all ${confirmCollection.artworks?.length ?? 0} artwork(s) within it will be permanently removed. This cannot be undone.`
+            ? t('dash.deleteCollectionMsg', {
+                name: confirmCollection.name,
+                count: confirmCollection.artworks?.length ?? 0,
+              })
             : ''
         }
-        confirmLabel="Delete collection"
+        confirmLabel={t('dash.deleteCollection')}
         destructive
         onConfirm={() => confirmCollection && handleDeleteCollection(confirmCollection)}
         onCancel={() => setConfirmCollection(null)}
@@ -171,13 +179,13 @@ export default function DashboardPage() {
 
       <ConfirmDialog
         open={confirmArtwork !== null}
-        title="Delete artwork"
+        title={t('dash.deleteArtwork')}
         message={
           confirmArtwork
-            ? `“${confirmArtwork.title}” will be permanently removed from this collection. This cannot be undone.`
+            ? t('dash.deleteArtworkMsg', { title: confirmArtwork.title })
             : ''
         }
-        confirmLabel="Delete artwork"
+        confirmLabel={t('dash.deleteArtwork')}
         destructive
         onConfirm={() => confirmArtwork && handleDeleteArtwork(confirmArtwork)}
         onCancel={() => setConfirmArtwork(null)}
@@ -185,7 +193,7 @@ export default function DashboardPage() {
 
       {deleting && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-ink-950/30 backdrop-blur-sm">
-          <div className="text-[11px] uppercase tracking-widest text-ink-50">Deleting…</div>
+          <div className="text-[11px] uppercase tracking-widest text-ink-50">{t('dash.deleting')}</div>
         </div>
       )}
     </div>
@@ -194,23 +202,27 @@ export default function DashboardPage() {
 
 function CollectionDetail({
   collection,
+  categoryLabel,
+  formatYearRange,
   onEdit,
   onAddArtwork,
   onArtworkClick,
   onArtworkDelete,
 }: {
   collection: Collection;
+  categoryLabel: (cat: MediaCategory | null) => string;
+  formatYearRange: (start: number | null, end: number | null) => string;
   onEdit: () => void;
   onAddArtwork: () => void;
   onArtworkClick: (a: Artwork) => void;
   onArtworkDelete: (a: Artwork) => void;
 }) {
+  const { t } = useLang();
   const yearRange = formatYearRange(collection.startYear, collection.endYear);
   const artworks = collection.artworks ?? [];
 
   return (
     <div className="fade-in">
-      {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="text-[11px] uppercase tracking-widest text-ink-400">
@@ -224,11 +236,11 @@ function CollectionDetail({
             <span className="inline-flex items-center gap-1.5">
               {collection.visibility === 'PRIVATE' ? (
                 <>
-                  <Lock className="h-3.5 w-3.5" /> Private
+                  <Lock className="h-3.5 w-3.5" /> {t('dash.private')}
                 </>
               ) : (
                 <>
-                  <Globe className="h-3.5 w-3.5" /> Public
+                  <Globe className="h-3.5 w-3.5" /> {t('dash.public')}
                 </>
               )}
             </span>
@@ -236,7 +248,7 @@ function CollectionDetail({
         </div>
         <button onClick={onEdit} className="btn-secondary">
           <Pencil className="h-4 w-4" />
-          Edit collection
+          {t('dash.editCollection')}
         </button>
       </div>
 
@@ -244,25 +256,24 @@ function CollectionDetail({
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-600">{collection.statement}</p>
       )}
 
-      {/* Artworks */}
       <div className="mt-12">
         <div className="flex items-center justify-between border-b border-ink-200 pb-3">
           <h2 className="text-[11px] uppercase tracking-widest text-ink-500">
-            Artworks <span className="text-ink-400">({artworks.length})</span>
+            {t('dash.artworks')} <span className="text-ink-400">({artworks.length})</span>
           </h2>
           <button onClick={onAddArtwork} className="btn-ghost -mr-2">
             <Plus className="h-4 w-4" />
-            Add artwork
+            {t('dash.addArtwork')}
           </button>
         </div>
 
         {artworks.length === 0 ? (
           <div className="mt-10 flex flex-col items-center justify-center rounded-sm border border-dashed border-ink-200 py-20 text-center">
             <ImageIcon className="h-8 w-8 text-ink-300" />
-            <p className="mt-3 text-sm text-ink-500">No artworks in this collection yet.</p>
+            <p className="mt-3 text-sm text-ink-500">{t('dash.noArtworks')}</p>
             <button onClick={onAddArtwork} className="btn-secondary mt-5">
               <Plus className="h-4 w-4" />
-              Add your first artwork
+              {t('dash.addFirstArtwork')}
             </button>
           </div>
         ) : (
@@ -283,18 +294,19 @@ function CollectionDetail({
 }
 
 function EmptyState({ onNew }: { onNew: () => void }) {
+  const { t } = useLang();
   return (
     <div className="fade-in flex h-[70vh] flex-col items-center justify-center text-center">
       <div className="flex h-16 w-16 items-center justify-center rounded-full bg-ink-100">
         <ImageIcon className="h-7 w-7 text-ink-400" />
       </div>
-      <h2 className="mt-6 font-serif text-3xl text-ink-900">Your archive is empty</h2>
+      <h2 className="mt-6 font-serif text-3xl text-ink-900">{t('dash.emptyTitle')}</h2>
       <p className="mt-2 max-w-sm text-sm text-ink-500">
-        Create your first collection to begin organizing your work by medium and series.
+        {t('dash.emptyBody')}
       </p>
       <button onClick={onNew} className="btn-primary mt-6">
         <Plus className="h-4 w-4" />
-        New collection
+        {t('dash.newCollection')}
       </button>
     </div>
   );

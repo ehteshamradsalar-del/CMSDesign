@@ -1,7 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import { useLang } from '../../lib/i18n';
 
 export default function Hero() {
     const navigate = useNavigate();
+    const { t } = useLang();
+
+    const headingLines = t('hero.heading').split('\n');
 
     return (
         <section className="hero">
@@ -9,22 +13,20 @@ export default function Hero() {
             <div className="hero-content">
 
                 <span className="hero-tag">
-                    Digital Collection Management Platform
+                    {t('hero.tag')}
                 </span>
 
                 <h1>
-                    The CMS built specifically
-                    <br />
-                    for artists, curators,
-                    <br />
-                    museums and galleries.
+                    {headingLines.map((line, i) => (
+                        <span key={i}>
+                            {line}
+                            {i < headingLines.length - 1 && <br />}
+                        </span>
+                    ))}
                 </h1>
 
                 <p>
-                    Manage artworks, exhibitions, publications,
-                    archives and portfolios in one place.
-                    Publish to your own website, search your collection
-                    with AI, and collaborate with curators effortlessly.
+                    {t('hero.body')}
                 </p>
 
                 <div className="hero-buttons">
@@ -33,14 +35,14 @@ export default function Hero() {
                         className="primary-btn"
                         onClick={() => navigate('/signup')}
                     >
-                        Start Free
+                        {t('hero.startFree')}
                     </button>
 
                     <button
                         className="secondary-btn"
                         onClick={() => navigate('/login')}
                     >
-                        Book Demo
+                        {t('hero.bookDemo')}
                     </button>
 
                 </div>

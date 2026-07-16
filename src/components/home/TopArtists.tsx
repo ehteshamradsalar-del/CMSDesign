@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../lib/api';
 import ArtworkCard from '../artwork/ArtworkCard';
+import { useLang } from '../../lib/i18n';
 import type { Artwork } from '../../lib/types';
 
-// Named "TopArtists" per the request that created this file, but deliberately
-// does NOT fabricate artist names, rankings, or bios — there's no real public
-// artist directory yet, and no basis for claiming any artist is "top."
-// Instead this pulls genuinely real public artworks from the live API, most
-// recent first. Once a real public artist directory / featured-artist
-// endpoint exists, this is the component to point at it.
 export default function TopArtists() {
+    const { t } = useLang();
     const [artworks, setArtworks] = useState<Artwork[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -40,13 +36,13 @@ export default function TopArtists() {
     return (
         <section className="from-archive" id="archive">
             <div className="from-archive-header">
-                <span className="section-number">03 /</span>
-                <span className="section-tag">From the archive</span>
-                <h2>Recently added public work</h2>
+                <span className="section-number">{t('top.sectionNumber')}</span>
+                <span className="section-tag">{t('top.sectionTag')}</span>
+                <h2>{t('top.heading')}</h2>
             </div>
 
             {loading ? (
-                <div className="from-archive-loading">Loading&hellip;</div>
+                <div className="from-archive-loading">{t('top.loading')}</div>
             ) : (
                 <div className="from-archive-grid">
                     {artworks.map((artwork) => (

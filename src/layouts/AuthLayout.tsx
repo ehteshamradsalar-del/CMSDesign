@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Archive } from 'lucide-react';
+import { useLang } from '../lib/i18n';
 
 interface Props {
   title: string;
@@ -18,6 +19,8 @@ export default function AuthLayout({
   altLinkLabel,
   children,
 }: Props) {
+  const { t } = useLang();
+
   return (
     <div className="flex min-h-screen flex-col lg:flex-row">
       {/* Left — editorial panel */}
@@ -31,15 +34,14 @@ export default function AuthLayout({
         />
         <div className="relative z-10 flex items-center gap-2.5 px-12 py-10 text-white">
           <Archive className="h-5 w-5 text-brand-gold" />
-          <span className="font-serif text-xl tracking-tight">Archive</span>
+          <span className="font-serif text-xl tracking-tight">{t('sidebar.brand')}</span>
         </div>
         <div className="relative z-10 px-12 pb-16">
           <p className="max-w-md font-serif text-3xl leading-snug text-white text-balance">
-            A quiet, structured archive for the work you make — organized by medium, by series, by the
-            ideas that connect them.
+            {t('footer.tagline')}
           </p>
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/60">
-            Built for visual artists who think in collections, not single images.
+            {t('features.1.desc')}
           </p>
         </div>
       </div>
@@ -49,7 +51,7 @@ export default function AuthLayout({
         <div className="w-full max-w-sm">
           <div className="mb-8 flex items-center gap-2.5 lg:hidden">
             <Archive className="h-5 w-5 text-brand-forest" />
-            <span className="font-serif text-xl tracking-tight text-ink-900">Archive</span>
+            <span className="font-serif text-xl tracking-tight text-ink-900">{t('sidebar.brand')}</span>
           </div>
           <h1 className="font-serif text-3xl text-ink-900">{title}</h1>
           <p className="mt-2 text-sm text-ink-500">{subtitle}</p>

@@ -5,11 +5,13 @@ import ErrorBanner from '../components/common/ErrorBanner';
 import ArtworkCard from '../components/artwork/ArtworkCard';
 import { api, parseApiError } from '../lib/api';
 import { mediaUrl, primaryMedia, artworkSubtitle } from '../lib/utils';
+import { useLang } from '../lib/i18n';
 import type { Artwork } from '../lib/types';
 
 export default function ArtworkDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { t } = useLang();
   const [artwork, setArtwork] = useState<Artwork | null>(null);
   const [related, setRelated] = useState<Artwork[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +29,6 @@ export default function ArtworkDetailPage() {
         if (cancelled) return;
         setArtwork(res.data);
 
-        // Load related works from the same collection if available
         const collectionId = res.data.collectionId;
         if (collectionId != null) {
           api
@@ -44,7 +45,7 @@ export default function ArtworkDetailPage() {
         }
       })
       .catch((err) => {
-        if (!cancelled) setError(parseApiError(err, 'Could not load this artwork.'));
+        if (!cancelled) setError(parseApiError(err, t('detail.error')));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -53,12 +54,12 @@ export default function ArtworkDetailPage() {
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, t]);
 
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-ink-50">
-        <div className="text-[11px] uppercase tracking-label text-ink-500">Loading</div>
+        <div className="text-[11px] uppercase tracking-label text-ink-500">{t('detail.loading')}</div>
       </div>
     );
   }
@@ -72,7 +73,7 @@ export default function ArtworkDetailPage() {
             className="inline-flex items-center gap-2 text-sm font-medium text-ink-600 transition-colors hover:text-ink-900"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to archive
+            {t('detail.backToArchive')}
           </button>
           <div className="mt-8">
             <ErrorBanner message={error} />
@@ -87,12 +88,12 @@ export default function ArtworkDetailPage() {
   const subtitle = artworkSubtitle(artwork);
 
   const tagArrays: { label: string; items: string[] | undefined }[] = [
-    { label: 'Concepts', items: artwork.concepts },
-    { label: 'Techniques', items: artwork.techniques },
-    { label: 'Materials', items: artwork.materials },
-    { label: 'Keywords', items: artwork.keywords },
-    { label: 'Themes', items: artwork.themes },
-    { label: 'References', items: artwork.references },
+    { label: t('detail.concepts'), items: artwork.concepts },
+    { label: t('detail.techniques'), items: artwork.techniques },
+    { label: t('detail.materials'), items: artwork.materials },
+    { label: t('detail.keywords'), items: artwork.keywords },
+    { label: t('detail.themes'), items: artwork.themes },
+    { label: t('detail.references'), items: artwork.references },
   ];
 
   const exhibitions = artwork.exhibitionHistory ?? [];
@@ -108,12 +109,12 @@ export default function ArtworkDetailPage() {
             className="inline-flex items-center gap-2 text-sm font-medium text-ink-600 transition-colors hover:text-ink-900"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to archive
+            {t('detail.backToArchive')}
           </button>
           {artwork.visibility === 'PRIVATE' && (
             <span className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-label text-ink-500">
               <Lock className="h-3.5 w-3.5" />
-              Private
+              {t('detail.private')}
             </span>
           )}
         </div>
@@ -140,7 +141,7 @@ export default function ArtworkDetailPage() {
               </div>
             ) : (
               <div className="flex aspect-[4/5] items-center justify-center rounded-sm border border-dashed border-ink-200 bg-white text-ink-500">
-                <span className="text-[11px] uppercase tracking-label">No image</span>
+                <span className="text-[11px] uppercase tracking-label">{t('detail.noImage')}</span>
               </div>
             )}
           </div>
@@ -148,18 +149,18 @@ export default function ArtworkDetailPage() {
           {/* Metadata sidebar */}
           <aside className="fade-in-up space-y-8" style={{ animationDelay: '0.05s' }}>
             <div>
-              <h2 className="section-tag mb-3">Details</h2>
+              <h2 className="section-tag mb-3">{t('detail.details')}</h2>
               <dl className="space-y-2.5 text-sm">
-                <DetailRow label="Medium" value={artwork.medium} />
-                <DetailRow label="Dimensions" value={artwork.dimensions} />
-                <DetailRow label="Edition" value={artwork.edition} />
-                <DetailRow label="Series" value={artwork.series} />
-                <DetailRow label="Year" value={artwork.year != null ? String(artwork.year) : undefined} />
-                <DetailRow label="Availability" value={availabilityLabel(artwork.availability)} />
+                <DetailRow label={t('detail.medium')} value={artwork.medium} />
+                <DetailRow label={t('detail.dimensions')} value={artwork.dimensions} />
+                <DetailRow label={t('detail.edition')} value={artwork.edition} />
+                <DetailRow label={t('detail.series')} value={artwork.series} />
+                <DetailRow label={t('detail.year')} value={artwork.year != null ? String(artwork.year) : undefined} />
+                <DetailRow label={t('detail.availability')} value={availabilityLabel(artwork.availability, t)} />
                 {artwork.price != null && (
-                  <DetailRow label="Price" value={`$${artwork.price.toLocaleString()}`} />
+                  <DetailRow label={t('detail.price')} value={`$${artwork.price.toLocaleString()}`} />
                 )}
-                <DetailRow label="Copyright" value={artwork.copyright} />
+                <DetailRow label={t('detail.copyright')} value={artwork.copyright} />
               </dl>
             </div>
 
@@ -184,7 +185,7 @@ export default function ArtworkDetailPage() {
             {/* Personal notes */}
             {artwork.personalNotes && (
               <div>
-                <h2 className="section-tag mb-3">Notes</h2>
+                <h2 className="section-tag mb-3">{t('detail.notes')}</h2>
                 <p className="text-sm leading-relaxed text-ink-600">{artwork.personalNotes}</p>
               </div>
             )}
@@ -194,7 +195,7 @@ export default function ArtworkDetailPage() {
         {/* Exhibition history */}
         {exhibitions.length > 0 && (
           <section className="mt-16 border-t border-ink-200 pt-8">
-            <h2 className="font-serif text-h2 text-ink-900">Exhibition history</h2>
+            <h2 className="font-serif text-h2 text-ink-900">{t('detail.exhibitionHistory')}</h2>
             <div className="mt-5 space-y-4">
               {exhibitions.map((ex, i) => (
                 <div
@@ -218,7 +219,7 @@ export default function ArtworkDetailPage() {
         {/* Publication history */}
         {publications.length > 0 && (
           <section className="mt-16 border-t border-ink-200 pt-8">
-            <h2 className="font-serif text-h2 text-ink-900">Publication history</h2>
+            <h2 className="font-serif text-h2 text-ink-900">{t('detail.publicationHistory')}</h2>
             <div className="mt-5 space-y-4">
               {publications.map((pub, i) => (
                 <div
@@ -237,7 +238,7 @@ export default function ArtworkDetailPage() {
                         rel="noopener noreferrer"
                         className="text-sm text-brand-gold-dark hover:underline"
                       >
-                        View
+                        {t('detail.view')}
                       </a>
                     )}
                     <span className="text-sm tabular-nums text-ink-500">{pub.year}</span>
@@ -252,13 +253,13 @@ export default function ArtworkDetailPage() {
         {related.length > 0 && (
           <section className="mt-16 border-t border-ink-200 pt-8">
             <div className="flex items-baseline justify-between">
-              <h2 className="font-serif text-h2 text-ink-900">From the same collection</h2>
+              <h2 className="font-serif text-h2 text-ink-900">{t('detail.sameCollection')}</h2>
               {artwork.collectionId && (
                 <Link
                   to="/archive"
                   className="text-sm font-medium text-brand-gold-dark hover:underline"
                 >
-                  View all
+                  {t('detail.viewAll')}
                 </Link>
               )}
             </div>
@@ -288,14 +289,17 @@ function DetailRow({ label, value }: { label: string; value?: string | null }) {
   );
 }
 
-function availabilityLabel(avail: string): string {
+function availabilityLabel(
+  avail: string,
+  t: (key: string) => string
+): string {
   switch (avail) {
     case 'AVAILABLE':
-      return 'Available';
+      return t('detail.available');
     case 'SOLD':
-      return 'Sold';
+      return t('detail.sold');
     case 'NOT_FOR_SALE':
-      return 'Not for sale';
+      return t('detail.notForSale');
     default:
       return avail;
   }

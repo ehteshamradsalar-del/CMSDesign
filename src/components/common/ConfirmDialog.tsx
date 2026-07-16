@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useLang } from '../../lib/i18n';
 
 interface Props {
   open: boolean;
@@ -16,12 +17,16 @@ export default function ConfirmDialog({
   open,
   title,
   message,
-  confirmLabel = 'Confirm',
-  cancelLabel = 'Cancel',
+  confirmLabel,
+  cancelLabel,
   destructive = false,
   onConfirm,
   onCancel,
 }: Props) {
+  const { t } = useLang();
+  const _confirmLabel = confirmLabel ?? t('dialog.confirm');
+  const _cancelLabel = cancelLabel ?? t('dialog.cancel');
+
   useEffect(() => {
     if (!open) return;
     function onKey(e: KeyboardEvent) {
@@ -43,14 +48,14 @@ export default function ConfirmDialog({
       <div className="fade-in-up w-full max-w-md rounded-sm border border-ink-200 bg-white p-6 shadow-xl">
         <div className="flex items-start justify-between">
           <h2 className="font-serif text-2xl text-ink-900">{title}</h2>
-          <button onClick={onCancel} className="icon-btn" aria-label="Close">
+          <button onClick={onCancel} className="icon-btn" aria-label={t('dialog.close')}>
             <X className="h-4 w-4" />
           </button>
         </div>
         <p className="mt-3 text-sm leading-relaxed text-ink-600">{message}</p>
         <div className="mt-6 flex justify-end gap-3">
           <button onClick={onCancel} className="btn-secondary">
-            {cancelLabel}
+            {_cancelLabel}
           </button>
           <button
             onClick={onConfirm}
@@ -60,7 +65,7 @@ export default function ConfirmDialog({
                 : 'btn-primary'
             }
           >
-            {confirmLabel}
+            {_confirmLabel}
           </button>
         </div>
       </div>

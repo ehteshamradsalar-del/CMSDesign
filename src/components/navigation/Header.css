@@ -174,6 +174,31 @@
 }
 
 /* ===========================================
+   Language Toggle
+=========================================== */
+
+.lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #e7e5e4;
+    background: transparent;
+    color: #555;
+    font-size: .82rem;
+    font-weight: 500;
+    padding: 7px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all .25s ease;
+}
+
+    .lang-toggle:hover {
+        border-color: #273C35;
+        color: #273C35;
+        background: rgba(39, 60, 53, 0.04);
+    }
+
+/* ===========================================
    Mobile Menu
 =========================================== */
 
@@ -260,6 +285,10 @@
 
     .login-button,
     .primary-button {
+        display: none;
+    }
+
+    .lang-toggle {
         display: none;
     }
 

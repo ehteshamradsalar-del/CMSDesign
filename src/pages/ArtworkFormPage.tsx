@@ -10,6 +10,7 @@ import {
   mediaUrl,
   primaryMedia,
 } from '../lib/utils';
+import { useLang } from '../lib/i18n';
 import type { Artwork, Collection, MediaAsset } from '../lib/types';
 
 interface FormState {
@@ -61,6 +62,7 @@ export default function ArtworkFormPage() {
   const isEdit = Boolean(id);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { t } = useLang();
 
   const [form, setForm] = useState<FormState>(emptyForm());
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -72,7 +74,6 @@ export default function ArtworkFormPage() {
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load collections for the select dropdown
   useEffect(() => {
     api
       .get<Collection[]>('/collections/mine')
@@ -80,7 +81,6 @@ export default function ArtworkFormPage() {
       .catch(() => setCollections([]));
   }, []);
 
-  // Load existing artwork when editing
   const loadArtwork = useCallback(async () => {
     if (!id) return;
     setLoading(true);
@@ -110,11 +110,11 @@ export default function ArtworkFormPage() {
       });
       setExistingMedia(primaryMedia(a));
     } catch (err) {
-      setError(parseApiError(err, 'Could not load this artwork.'));
+      setError(parseApiError(err, t('af.errorLoadArtwork')));
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, t]);
 
   useEffect(() => {
     if (isEdit) {
@@ -127,7 +127,6 @@ export default function ArtworkFormPage() {
     }
   }, [isEdit, loadArtwork, searchParams]);
 
-  // File preview
   useEffect(() => {
     if (!file) {
       setFilePreview(null);
@@ -157,7 +156,7 @@ export default function ArtworkFormPage() {
     setError(null);
 
     if (!form.title.trim()) {
-      setError('Please enter a title.');
+      setError(t('af.errorTitle'));
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -165,11 +164,11 @@ export default function ArtworkFormPage() {
     const year = form.year ? parseInt(form.year, 10) : null;
     const price = form.price ? parseFloat(form.price) : null;
     if (form.year && (year === null || isNaN(year))) {
-      setError('Year must be a valid number.');
+      setError(t('af.errorYear'));
       return;
     }
     if (form.price && (price === null || isNaN(price))) {
-      setError('Price must be a valid number.');
+      setError(t('af.errorPrice'));
       return;
     }
 
@@ -205,7 +204,6 @@ export default function ArtworkFormPage() {
         savedArtwork = res.data;
       }
 
-      // Upload media if a file was chosen
       if (file) {
         const fd = new FormData();
         fd.append('file', file);
@@ -227,7 +225,7 @@ export default function ArtworkFormPage() {
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-ink-50">
-        <div className="text-[11px] uppercase tracking-widest text-ink-400">Loading</div>
+        <div className="text-[11px] uppercase tracking-widest text-ink-400">{t('protected.loading')}</div>
       </div>
     );
   }
@@ -236,7 +234,6 @@ export default function ArtworkFormPage() {
 
   return (
     <div className="min-h-screen bg-ink-50">
-      {/* Top bar */}
       <header className="sticky top-0 z-20 border-b border-ink-200 bg-ink-50/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4 sm:px-10">
           <button
@@ -244,22 +241,20 @@ export default function ArtworkFormPage() {
             className="inline-flex items-center gap-2 text-sm font-medium text-ink-600 transition-colors hover:text-ink-900"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to dashboard
+            {t('af.backToDashboard')}
           </button>
           <span className="text-[11px] uppercase tracking-widest text-ink-400">
-            {isEdit ? 'Edit artwork' : 'New artwork'}
+            {isEdit ? t('af.editArtwork') : t('af.newArtwork')}
           </span>
         </div>
       </header>
 
       <form onSubmit={handleSubmit} className="mx-auto max-w-3xl px-6 py-10 sm:px-10">
         <h1 className="font-serif text-4xl text-ink-900">
-          {isEdit ? 'Edit artwork' : 'Add artwork'}
+          {isEdit ? t('af.editArtwork') : t('af.addArtwork')}
         </h1>
         <p className="mt-2 text-sm text-ink-500">
-          {isEdit
-            ? 'Update the details of this work. Fields marked optional can be left blank.'
-            : 'Record a new work in your archive. Only the title is required.'}
+          {isEdit ? t('af.editIntro') : t('af.newIntro')}
         </p>
 
         <div className="mt-8">
@@ -267,19 +262,18 @@ export default function ArtworkFormPage() {
         </div>
 
         <div className="mt-8 space-y-16">
-          {/* Group 1 — Basics */}
-          <Section number="01" title="Basics">
-            <Field label="Title" required>
+          <Section number="01" title={t('af.section.basics')}>
+            <Field label={t('af.title')} required>
               <input
                 type="text"
                 value={form.title}
                 onChange={(e) => update('title', e.target.value)}
                 className="field-input"
-                placeholder="Untitled (Study in Ochre)"
+                placeholder={t('af.title')}
               />
             </Field>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <Field label="Year">
+              <Field label={t('af.year')}>
                 <input
                   type="number"
                   value={form.year}
@@ -290,7 +284,7 @@ export default function ArtworkFormPage() {
                   max={new Date().getFullYear() + 50}
                 />
               </Field>
-              <Field label="Dimensions">
+              <Field label={t('af.dimensions')}>
                 <input
                   type="text"
                   value={form.dimensions}
@@ -301,16 +295,16 @@ export default function ArtworkFormPage() {
               </Field>
             </div>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <Field label="Medium">
+              <Field label={t('af.medium')}>
                 <input
                   type="text"
                   value={form.medium}
                   onChange={(e) => update('medium', e.target.value)}
                   className="field-input"
-                  placeholder="Oil on linen"
+                  placeholder={t('af.medium')}
                 />
               </Field>
-              <Field label="Edition">
+              <Field label={t('af.edition')}>
                 <input
                   type="text"
                   value={form.edition}
@@ -321,16 +315,16 @@ export default function ArtworkFormPage() {
               </Field>
             </div>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <Field label="Series">
+              <Field label={t('af.series')}>
                 <input
                   type="text"
                   value={form.series}
                   onChange={(e) => update('series', e.target.value)}
                   className="field-input"
-                  placeholder="Threshold Studies"
+                  placeholder={t('af.series')}
                 />
               </Field>
-              <Field label="Availability">
+              <Field label={t('af.availability')}>
                 <select
                   value={form.availability}
                   onChange={(e) =>
@@ -340,19 +334,19 @@ export default function ArtworkFormPage() {
                 >
                   {AVAILABILITY_OPTIONS.map((o) => (
                     <option key={o.value} value={o.value}>
-                      {o.label}
+                      {t(o.labelKey)}
                     </option>
                   ))}
                 </select>
               </Field>
             </div>
-            <Field label="Collection">
+            <Field label={t('af.collection')}>
               <select
                 value={form.collectionId}
                 onChange={(e) => update('collectionId', e.target.value)}
                 className="field-input cursor-pointer"
               >
-                <option value="">— Uncategorized —</option>
+                <option value="">{t('af.uncategorized')}</option>
                 {collections.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.name}
@@ -362,79 +356,76 @@ export default function ArtworkFormPage() {
             </Field>
           </Section>
 
-          {/* Group 2 — Curatorial detail */}
-          <Section number="02" title="Curatorial detail" note="Separate multiple entries with commas">
-            <Field label="Concepts">
+          <Section number="02" title={t('af.section.curatorial')} note={t('af.commaNote')}>
+            <Field label={t('af.concepts')}>
               <input
                 type="text"
                 value={form.concepts}
                 onChange={(e) => update('concepts', e.target.value)}
                 className="field-input"
-                placeholder="memory, erosion, domestic space"
+                placeholder={t('af.concepts')}
               />
             </Field>
-            <Field label="Technique">
+            <Field label={t('af.technique')}>
               <input
                 type="text"
                 value={form.techniques}
                 onChange={(e) => update('techniques', e.target.value)}
                 className="field-input"
-                placeholder="glazing, impasto, sgraffito"
+                placeholder={t('af.technique')}
               />
             </Field>
-            <Field label="Materials">
+            <Field label={t('af.materials')}>
               <input
                 type="text"
                 value={form.materials}
                 onChange={(e) => update('materials', e.target.value)}
                 className="field-input"
-                placeholder="linen, rabbit-skin glue, lead white"
+                placeholder={t('af.materials')}
               />
             </Field>
-            <Field label="References">
+            <Field label={t('af.references')}>
               <input
                 type="text"
                 value={form.references}
                 onChange={(e) => update('references', e.target.value)}
                 className="field-input"
-                placeholder="Morandi, Tuttle, Agnes Martin"
+                placeholder={t('af.references')}
               />
             </Field>
-                      <Field label="personal notes">
-                          <input
-                              type="text"
-                              value={form.personalNotes}
-                              onChange={(e) => update('personalNotes', e.target.value)}
-                              className="field-input"
-                              placeholder="thoughts on the process"
-                          />
-                      </Field>
+            <Field label={t('af.personalNotes')}>
+              <input
+                type="text"
+                value={form.personalNotes}
+                onChange={(e) => update('personalNotes', e.target.value)}
+                className="field-input"
+                placeholder={t('af.personalNotes')}
+              />
+            </Field>
           </Section>
 
-          {/* Group 3 — Keywords & themes */}
-          <Section number="03" title="Keywords & themes" note="Separate multiple entries with commas">
-            <Field label="Keywords">
+          <Section number="03" title={t('af.section.keywords')} note={t('af.commaNote')}>
+            <Field label={t('af.keywords')}>
               <input
                 type="text"
                 value={form.keywords}
                 onChange={(e) => update('keywords', e.target.value)}
                 className="field-input"
-                placeholder="still life, interior, light"
+                placeholder={t('af.keywords')}
               />
             </Field>
-            <Field label="Themes">
+            <Field label={t('af.themes')}>
               <input
                 type="text"
                 value={form.themes}
                 onChange={(e) => update('themes', e.target.value)}
                 className="field-input"
-                placeholder="solitude, time, materiality"
+                placeholder={t('af.themes')}
               />
             </Field>
           </Section>
 
-          {/* Group 4 — Image */}
-          <Section number="04" title="Image">
+          <Section number="04" title={t('af.section.image')}>
             <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
               <div className="relative aspect-[4/5] w-40 flex-shrink-0 overflow-hidden rounded-sm bg-ink-100 ring-1 ring-ink-200/60">
                 {currentPreview ? (
@@ -442,7 +433,7 @@ export default function ArtworkFormPage() {
                 ) : (
                   <div className="flex h-full w-full flex-col items-center justify-center gap-1.5 text-ink-300">
                     <ImageIcon className="h-6 w-6" />
-                    <span className="text-[10px] uppercase tracking-widest">No image</span>
+                    <span className="text-[10px] uppercase tracking-widest">{t('af.noImage')}</span>
                   </div>
                 )}
               </div>
@@ -458,7 +449,7 @@ export default function ArtworkFormPage() {
                 {file ? (
                   <div className="flex items-center justify-between rounded-sm border border-ink-200 bg-white px-3.5 py-2.5">
                     <span className="truncate text-sm text-ink-700">{file.name}</span>
-                    <button type="button" onClick={clearFile} className="icon-btn" aria-label="Remove file">
+                    <button type="button" onClick={clearFile} className="icon-btn" aria-label={t('af.removeFile')}>
                       <X className="h-4 w-4" />
                     </button>
                   </div>
@@ -468,22 +459,19 @@ export default function ArtworkFormPage() {
                     className="flex cursor-pointer items-center justify-center gap-2 rounded-sm border border-dashed border-ink-300 bg-white px-4 py-6 text-sm text-ink-500 transition-colors hover:border-ink-900 hover:text-ink-900"
                   >
                     <Upload className="h-4 w-4" />
-                    {isEdit && existingMedia ? 'Replace image' : 'Choose an image'}
+                    {isEdit && existingMedia ? t('af.replaceImage') : t('af.chooseImage')}
                   </label>
                 )}
                 <p className="mt-2 text-xs text-ink-400">
-                  {isEdit && existingMedia
-                    ? 'A new image will replace the current one on save.'
-                    : 'Uploaded after the artwork record is created.'}
+                  {isEdit && existingMedia ? t('af.imageHelperEdit') : t('af.imageHelperNew')}
                 </p>
               </div>
             </div>
           </Section>
 
-          {/* Group 5 — Administrative */}
-          <Section number="05" title="Administrative">
+          <Section number="05" title={t('af.section.admin')}>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <Field label="Visibility">
+              <Field label={t('af.title')}>
                 <select
                   value={form.visibility}
                   onChange={(e) => update('visibility', e.target.value as FormState['visibility'])}
@@ -491,24 +479,24 @@ export default function ArtworkFormPage() {
                 >
                   {VISIBILITY_OPTIONS.map((o) => (
                     <option key={o.value} value={o.value}>
-                      {o.label}
+                      {t(o.labelKey)}
                     </option>
                   ))}
                 </select>
               </Field>
-              <Field label="Price">
+              <Field label={t('af.price')}>
                 <input
                   type="number"
                   value={form.price}
                   onChange={(e) => update('price', e.target.value)}
                   className="field-input"
-                  placeholder="Optional"
+                  placeholder={t('af.pricePlaceholder')}
                   min={0}
                   step="0.01"
                 />
               </Field>
             </div>
-            <Field label="Copyright">
+            <Field label={t('af.copyright')}>
               <input
                 type="text"
                 value={form.copyright}
@@ -520,7 +508,6 @@ export default function ArtworkFormPage() {
           </Section>
         </div>
 
-        {/* Actions */}
         <div className="mt-16 flex items-center justify-end gap-3 border-t border-ink-200 pt-6">
           <button
             type="button"
@@ -528,10 +515,10 @@ export default function ArtworkFormPage() {
             className="btn-secondary"
             disabled={saving}
           >
-            Cancel
+            {t('af.cancel')}
           </button>
           <button type="submit" className="btn-primary" disabled={saving}>
-            {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Add artwork'}
+            {saving ? t('af.saving') : isEdit ? t('af.saveChanges') : t('af.addArtwork')}
           </button>
         </div>
       </form>
@@ -577,7 +564,7 @@ function Field({
     <div>
       <label className="field-label">
         {label}
-        {required && <span className="ml-1 text-ink-400 normal-case">required</span>}
+        {required && <span className="ml-1 text-ink-400 normal-case">{('cf.required')}</span>}
       </label>
       {children}
     </div>

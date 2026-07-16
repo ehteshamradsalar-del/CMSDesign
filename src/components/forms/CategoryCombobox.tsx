@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Check, ChevronDown } from 'lucide-react';
 import { MEDIA_CATEGORIES } from '../../lib/constants';
+import { useLang } from '../../lib/i18n';
 import type { MediaCategory } from '../../lib/types';
 import { classNames } from '../../lib/utils';
 
@@ -12,19 +13,25 @@ interface Props {
 }
 
 export default function CategoryCombobox({ value, onChange, id, placeholder }: Props) {
+  const { t } = useLang();
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [highlight, setHighlight] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const selectedLabel = value ? MEDIA_CATEGORIES.find((c) => c.value === value)?.label ?? '' : '';
+  const items = useMemo(
+    () => MEDIA_CATEGORIES.map((c) => ({ value: c.value, label: t(c.labelKey) })),
+    [t]
+  );
+
+  const selectedLabel = value ? items.find((c) => c.value === value)?.label ?? '' : '';
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return MEDIA_CATEGORIES;
-    return MEDIA_CATEGORIES.filter((c) => c.label.toLowerCase().includes(q));
-  }, [query]);
+    if (!q) return items;
+    return items.filter((c) => c.label.toLowerCase().includes(q));
+  }, [query, items]);
 
   useEffect(() => {
     if (open) {
@@ -82,7 +89,7 @@ export default function CategoryCombobox({ value, onChange, id, placeholder }: P
         id={id}
         type="text"
         autoComplete="off"
-        placeholder={placeholder ?? 'Select a medium…'}
+        placeholder={placeholder ?? t('combo.placeholder')}
         value={open ? query : selectedLabel}
         onChange={(e) => {
           if (!open) setOpen(true);
@@ -106,7 +113,7 @@ export default function CategoryCombobox({ value, onChange, id, placeholder }: P
       {open && (
         <div className="fade-in absolute z-30 mt-1 max-h-64 w-full overflow-auto rounded-sm border border-ink-200 bg-white py-1 shadow-lg">
           {filtered.length === 0 ? (
-            <div className="px-3.5 py-2 text-sm text-ink-400">No matching categories</div>
+            <div className="px-3.5 py-2 text-sm text-ink-400">{t('combo.noMatch')}</div>
           ) : (
             <ul id="category-listbox" role="listbox">
               {filtered.map((item, i) => (

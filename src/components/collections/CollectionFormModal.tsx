@@ -5,6 +5,7 @@ import ErrorBanner from '../common/ErrorBanner';
 import { VISIBILITY_OPTIONS } from '../../lib/constants';
 import { parseApiError } from '../../lib/auth';
 import { api } from '../../lib/api';
+import { useLang } from '../../lib/i18n';
 import type { Collection, MediaCategory, Visibility } from '../../lib/types';
 
 interface Props {
@@ -24,6 +25,7 @@ interface FormState {
 }
 
 export default function CollectionFormModal({ open, collection, onClose, onSaved }: Props) {
+  const { t } = useLang();
   const [form, setForm] = useState<FormState>(emptyForm());
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -59,18 +61,18 @@ export default function CollectionFormModal({ open, collection, onClose, onSaved
     setError(null);
 
     if (!form.name.trim()) {
-      setError('Please enter a collection name.');
+      setError(t('cf.errorName'));
       return;
     }
 
     const startYear = form.startYear ? parseInt(form.startYear, 10) : null;
     const endYear = form.endYear ? parseInt(form.endYear, 10) : null;
     if (form.startYear && (startYear === null || isNaN(startYear))) {
-      setError('Start year must be a valid number.');
+      setError(t('cf.errorStartYear'));
       return;
     }
     if (form.endYear && (endYear === null || isNaN(endYear))) {
-      setError('End year must be a valid number.');
+      setError(t('cf.errorEndYear'));
       return;
     }
 
@@ -109,8 +111,8 @@ export default function CollectionFormModal({ open, collection, onClose, onSaved
     >
       <div className="fade-in-up w-full max-w-lg overflow-hidden rounded-sm border border-ink-200 bg-white shadow-xl">
         <div className="flex items-center justify-between border-b border-ink-100 px-6 py-4">
-          <h2 className="font-serif text-2xl text-ink-900">{isEdit ? 'Edit collection' : 'New collection'}</h2>
-          <button onClick={onClose} className="icon-btn" aria-label="Close">
+          <h2 className="font-serif text-2xl text-ink-900">{isEdit ? t('cf.editTitle') : t('cf.newTitle')}</h2>
+          <button onClick={onClose} className="icon-btn" aria-label={t('dialog.close')}>
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -119,7 +121,7 @@ export default function CollectionFormModal({ open, collection, onClose, onSaved
           <div className={error ? 'mt-4' : ''}>
             <div className="mb-5">
               <label htmlFor="col-name" className="field-label">
-                Name <span className="text-ink-400 normal-case">required</span>
+                {t('cf.name')} <span className="text-ink-400 normal-case">{t('cf.required')}</span>
               </label>
               <input
                 id="col-name"
@@ -127,24 +129,24 @@ export default function CollectionFormModal({ open, collection, onClose, onSaved
                 value={form.name}
                 onChange={(e) => update('name', e.target.value)}
                 className="field-input"
-                placeholder="e.g. Threshold Studies"
+                placeholder={t('cf.namePlaceholder')}
                 autoFocus
               />
             </div>
 
             <div className="mb-5">
-              <label className="field-label">Category</label>
+              <label className="field-label">{t('cf.category')}</label>
               <CategoryCombobox
                 value={form.category}
                 onChange={(v) => update('category', v)}
-                placeholder="Select a medium…"
+                placeholder={t('combo.placeholder')}
               />
-              <p className="mt-1.5 text-xs text-ink-400">Only predefined media categories can be selected.</p>
+              <p className="mt-1.5 text-xs text-ink-400">{t('cf.categoryHelper')}</p>
             </div>
 
             <div className="mb-5">
               <label htmlFor="col-statement" className="field-label">
-                Curatorial statement
+                {t('cf.statement')}
               </label>
               <textarea
                 id="col-statement"
@@ -152,14 +154,14 @@ export default function CollectionFormModal({ open, collection, onClose, onSaved
                 onChange={(e) => update('statement', e.target.value)}
                 rows={4}
                 className="field-input resize-none leading-relaxed"
-                placeholder="A short text describing the concerns and intentions of this body of work…"
+                placeholder={t('cf.statementPlaceholder')}
               />
             </div>
 
             <div className="mb-5 grid grid-cols-2 gap-4">
               <div>
                 <label htmlFor="col-start" className="field-label">
-                  Start year
+                  {t('cf.startYear')}
                 </label>
                 <input
                   id="col-start"
@@ -167,14 +169,14 @@ export default function CollectionFormModal({ open, collection, onClose, onSaved
                   value={form.startYear}
                   onChange={(e) => update('startYear', e.target.value)}
                   className="field-input"
-                  placeholder="2019"
+                  placeholder={t('cf.startYearPlaceholder')}
                   min={0}
                   max={new Date().getFullYear() + 50}
                 />
               </div>
               <div>
                 <label htmlFor="col-end" className="field-label">
-                  End year
+                  {t('cf.endYear')}
                 </label>
                 <input
                   id="col-end"
@@ -182,7 +184,7 @@ export default function CollectionFormModal({ open, collection, onClose, onSaved
                   value={form.endYear}
                   onChange={(e) => update('endYear', e.target.value)}
                   className="field-input"
-                  placeholder="2022"
+                  placeholder={t('cf.endYearPlaceholder')}
                   min={0}
                   max={new Date().getFullYear() + 50}
                 />
@@ -191,7 +193,7 @@ export default function CollectionFormModal({ open, collection, onClose, onSaved
 
             <div>
               <label htmlFor="col-visibility" className="field-label">
-                Visibility
+                {t('cf.visibility')}
               </label>
               <select
                 id="col-visibility"
@@ -201,7 +203,7 @@ export default function CollectionFormModal({ open, collection, onClose, onSaved
               >
                 {VISIBILITY_OPTIONS.map((o) => (
                   <option key={o.value} value={o.value}>
-                    {o.label}
+                    {t(o.labelKey)}
                   </option>
                 ))}
               </select>
@@ -210,10 +212,10 @@ export default function CollectionFormModal({ open, collection, onClose, onSaved
         </form>
         <div className="flex justify-end gap-3 border-t border-ink-100 px-6 py-4">
           <button onClick={onClose} className="btn-secondary" disabled={saving}>
-            Cancel
+            {t('cf.cancel')}
           </button>
           <button onClick={handleSubmit} className="btn-primary" disabled={saving}>
-            {saving ? 'Saving…' : isEdit ? 'Save changes' : 'Create collection'}
+            {saving ? t('cf.saving') : isEdit ? t('cf.saveChanges') : t('cf.createCollection')}
           </button>
         </div>
       </div>

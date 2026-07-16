@@ -4,10 +4,12 @@ import AuthLayout from '../layouts/AuthLayout';
 import ErrorBanner from '../components/common/ErrorBanner';
 import GoogleButton from '../components/common/GoogleButton';
 import { useAuth, parseApiError } from '../lib/auth';
+import { useLang } from '../lib/i18n';
 
 export default function SignupPage() {
   const { signup } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLang();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -20,7 +22,7 @@ export default function SignupPage() {
     e.preventDefault();
     setError(null);
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+      setError(t('auth.passwordTooShort'));
       return;
     }
     setLoading(true);
@@ -39,24 +41,23 @@ export default function SignupPage() {
     }
   }
 
-  // TODO: backend does not yet support Google OAuth — this should eventually redirect to something like GET /api/auth/google
   function handleGoogleLogin() {
-    setError('Google sign-in is not available yet. Please use email and password.');
+    setError(t('auth.googleError'));
   }
 
   return (
     <AuthLayout
-      title="Create your archive"
-      subtitle="Start organizing your practice by medium and collection."
-      altText="Already have an account?"
+      title={t('auth.createArchive')}
+      subtitle={t('auth.signupSubtitle')}
+      altText={t('auth.alreadyHave')}
       altLinkTo="/login"
-      altLinkLabel="Sign in"
+      altLinkLabel={t('auth.signIn')}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <ErrorBanner message={error} />
         <div>
           <label htmlFor="name" className="field-label">
-            Name
+            {t('auth.name')}
           </label>
           <input
             id="name"
@@ -66,12 +67,12 @@ export default function SignupPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="field-input"
-            placeholder="Your name"
+            placeholder={t('auth.namePlaceholder')}
           />
         </div>
         <div>
           <label htmlFor="email" className="field-label">
-            Email
+            {t('auth.email')}
           </label>
           <input
             id="email"
@@ -81,12 +82,12 @@ export default function SignupPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="field-input"
-            placeholder="you@studio.com"
+            placeholder={t('auth.emailPlaceholder')}
           />
         </div>
         <div>
           <label htmlFor="password" className="field-label">
-            Password
+            {t('auth.password')}
           </label>
           <input
             id="password"
@@ -96,12 +97,12 @@ export default function SignupPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="field-input"
-            placeholder="At least 6 characters"
+            placeholder={t('auth.passwordNewPlaceholder')}
           />
         </div>
         <div>
           <label htmlFor="country" className="field-label">
-            Country <span className="text-ink-400 normal-case">optional</span>
+            {t('auth.country')} <span className="text-ink-400 normal-case">{t('auth.optional')}</span>
           </label>
           <input
             id="country"
@@ -110,17 +111,17 @@ export default function SignupPage() {
             value={country}
             onChange={(e) => setCountry(e.target.value)}
             className="field-input"
-            placeholder="e.g. Portugal"
+            placeholder={t('auth.countryPlaceholder')}
           />
         </div>
         <button type="submit" className="btn-primary w-full" disabled={loading}>
-          {loading ? 'Creating account…' : 'Create account'}
+          {loading ? t('auth.creatingAccount') : t('auth.createBtn')}
         </button>
       </form>
 
       <div className="my-6 flex items-center gap-3">
         <div className="h-px flex-1 bg-ink-200" />
-        <span className="text-[11px] uppercase tracking-widest text-ink-400">or</span>
+        <span className="text-[11px] uppercase tracking-widest text-ink-400">{t('auth.or')}</span>
         <div className="h-px flex-1 bg-ink-200" />
       </div>
 

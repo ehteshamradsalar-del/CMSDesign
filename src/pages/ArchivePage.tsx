@@ -5,10 +5,12 @@ import ArtworkCard from '../components/artwork/ArtworkCard';
 import ErrorBanner from '../components/common/ErrorBanner';
 import { api, parseApiError } from '../lib/api';
 import { MEDIA_CATEGORIES } from '../lib/constants';
+import { useLang } from '../lib/i18n';
 import type { Artwork, MediaCategory } from '../lib/types';
 
 export default function ArchivePage() {
   const navigate = useNavigate();
+  const { t } = useLang();
   const [artworks, setArtworks] = useState<Artwork[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +30,7 @@ export default function ArchivePage() {
         setArtworks(data);
       })
       .catch((err) => {
-        if (!cancelled) setError(parseApiError(err, 'Could not load the archive.'));
+        if (!cancelled) setError(parseApiError(err, t('archive.error')));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -36,13 +38,10 @@ export default function ArchivePage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [t]);
 
   const filtered = useMemo(() => {
     let list = artworks;
-    // Category filtering would require collection data on each artwork;
-    // the API doesn't embed category on artworks, so this is a no-op for now.
-    // Search filtering below handles the primary client-side filtering.
     const q = query.trim().toLowerCase();
     if (q) {
       list = list.filter((a) => {
@@ -54,7 +53,7 @@ export default function ArchivePage() {
       });
     }
     return list;
-  }, [artworks, query, activeCategories]);
+  }, [artworks, query]);
 
   function toggleCategory(cat: MediaCategory) {
     setActiveCategories((prev) => {
@@ -77,14 +76,13 @@ export default function ArchivePage() {
       {/* Page header */}
       <div className="border-b border-ink-200 bg-white">
         <div className="mx-auto max-w-editorial px-6 py-10 sm:px-10">
-          <span className="section-number">Archive /</span>
-          <span className="section-tag ml-2">Public collection</span>
+          <span className="section-number">{t('archive.sectionNumber')}</span>
+          <span className="section-tag ml-2">{t('archive.sectionTag')}</span>
           <h1 className="mt-2 font-serif text-display text-ink-900 text-balance">
-            The Archive
+            {t('archive.heading')}
           </h1>
           <p className="mt-3 max-w-xl text-body text-ink-500">
-            Browse public works across all artists and collections. Search by title,
-            medium, keyword, or theme.
+            {t('archive.body')}
           </p>
         </div>
       </div>
@@ -98,9 +96,9 @@ export default function ArchivePage() {
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by title, medium, keyword…"
+              placeholder={t('archive.searchPlaceholder')}
               className="field-input pl-9"
-              aria-label="Search the archive"
+              aria-label={t('archive.searchAria')}
             />
           </div>
           <button
@@ -110,7 +108,7 @@ export default function ArchivePage() {
             aria-controls="filter-panel"
           >
             <SlidersHorizontal className="h-4 w-4" />
-            Filters
+            {t('archive.filters')}
             {activeCategories.size > 0 && (
               <span className="ml-1 rounded-pill bg-brand-gold/20 px-1.5 py-0.5 text-[10px] font-medium text-brand-gold-dark">
                 {activeCategories.size}
@@ -124,11 +122,11 @@ export default function ArchivePage() {
           <div id="filter-panel" className="fade-in border-t border-ink-200 bg-white">
             <div className="mx-auto max-w-editorial px-6 py-5 sm:px-10">
               <div className="mb-3 flex items-center justify-between">
-                <span className="field-label mb-0">Filter by medium</span>
+                <span className="field-label mb-0">{t('archive.filterByMedium')}</span>
                 {hasFilters && (
                   <button onClick={clearFilters} className="btn-ghost text-xs">
                     <X className="h-3 w-3" />
-                    Clear all
+                    {t('archive.clearAll')}
                   </button>
                 )}
               </div>
@@ -141,7 +139,7 @@ export default function ArchivePage() {
                       onClick={() => toggleCategory(c.value)}
                       className={active ? 'tag-chip-active' : 'tag-chip'}
                     >
-                      {c.label}
+                      {t(c.labelKey)}
                     </button>
                   );
                 })}
@@ -155,7 +153,7 @@ export default function ArchivePage() {
       <div className="mx-auto max-w-editorial px-6 py-10 sm:px-10">
         {loading ? (
           <div className="flex h-64 items-center justify-center">
-            <div className="text-[11px] uppercase tracking-label text-ink-500">Loading</div>
+            <div className="text-[11px] uppercase tracking-label text-ink-500">{t('archive.loading')}</div>
           </div>
         ) : error ? (
           <div className="max-w-xl">
@@ -163,22 +161,20 @@ export default function ArchivePage() {
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex h-64 flex-col items-center justify-center text-center">
-            <p className="font-serif text-h2 text-ink-900">No artworks found</p>
+            <p className="font-serif text-h2 text-ink-900">{t('archive.noResults')}</p>
             <p className="mt-2 text-sm text-ink-500">
-              {hasFilters
-                ? 'Try adjusting your search or filters.'
-                : 'The archive is empty for now.'}
+              {hasFilters ? t('archive.adjustFilters') : t('archive.empty')}
             </p>
             {hasFilters && (
               <button onClick={clearFilters} className="btn-secondary mt-5">
-                Clear filters
+                {t('archive.clearFilters')}
               </button>
             )}
           </div>
         ) : (
           <>
             <div className="mb-6 text-sm text-ink-500">
-              {filtered.length} {filtered.length === 1 ? 'work' : 'works'}
+              {filtered.length} {filtered.length === 1 ? t('archive.work') : t('archive.works')}
             </div>
             <div className="stagger grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((a) => (

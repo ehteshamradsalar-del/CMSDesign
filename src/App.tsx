@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./lib/auth";
+import { LanguageProvider } from "./lib/i18n";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import PublicLayout from "./layouts/PublicLayout";
 
@@ -13,9 +14,10 @@ import ArtworkFormPage from "./pages/ArtworkFormPage";
 
 function App() {
     return (
-        <AuthProvider>
-            <BrowserRouter>
-                <Routes>
+        <LanguageProvider>
+            <AuthProvider>
+                <BrowserRouter>
+                    <Routes>
 
                     {/* Public pages */}
                     <Route element={<PublicLayout />}>
@@ -59,9 +61,10 @@ function App() {
                     {/* fallback */}
                     <Route path="*" element={<Navigate to="/" replace />} />
 
-                </Routes>
-            </BrowserRouter>
-        </AuthProvider>
+                    </Routes>
+                </BrowserRouter>
+            </AuthProvider>
+        </LanguageProvider>
     );
 }
 

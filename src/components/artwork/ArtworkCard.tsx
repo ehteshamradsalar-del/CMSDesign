@@ -1,6 +1,7 @@
-import { Minus, ImageIcon } from 'lucide-react';
+import { Minus, Image as ImageIcon } from 'lucide-react';
 import type { Artwork } from '../../lib/types';
 import { artworkSubtitle, classNames, mediaUrl, primaryMedia } from '../../lib/utils';
+import { useLang } from '../../lib/i18n';
 
 interface Props {
   artwork: Artwork;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export default function ArtworkCard({ artwork, onDelete, onClick }: Props) {
+  const { t } = useLang();
   const media = primaryMedia(artwork);
   const url = mediaUrl(media);
   const subtitle = artworkSubtitle(artwork);
@@ -32,7 +34,7 @@ export default function ArtworkCard({ artwork, onDelete, onClick }: Props) {
         ) : (
           <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-ink-300">
             <ImageIcon className="h-8 w-8" />
-            <span className="text-[11px] uppercase tracking-widest">No image</span>
+            <span className="text-[11px] uppercase tracking-widest">{t('card.noImage')}</span>
           </div>
         )}
         {onDelete && (
@@ -42,8 +44,8 @@ export default function ArtworkCard({ artwork, onDelete, onClick }: Props) {
               onDelete(artwork);
             }}
             className="icon-btn-danger absolute right-2 top-2 bg-white/85 opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100"
-            aria-label="Delete artwork"
-            title="Delete artwork"
+            aria-label={t('card.deleteArtwork')}
+            title={t('card.deleteArtwork')}
           >
             <Minus className="h-4 w-4" />
           </button>

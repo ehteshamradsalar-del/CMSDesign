@@ -4,11 +4,13 @@ import AuthLayout from '../layouts/AuthLayout';
 import ErrorBanner from '../components/common/ErrorBanner';
 import GoogleButton from '../components/common/GoogleButton';
 import { useAuth, parseApiError } from '../lib/auth';
+import { useLang } from '../lib/i18n';
 
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLang();
   const from = (location.state as { from?: string } | null)?.from ?? '/dashboard';
 
   const [email, setEmail] = useState('');
@@ -30,24 +32,23 @@ export default function LoginPage() {
     }
   }
 
-  // TODO: backend does not yet support Google OAuth — this should eventually redirect to something like GET /api/auth/google
   function handleGoogleLogin() {
-    setError('Google sign-in is not available yet. Please use email and password.');
+    setError(t('auth.googleError'));
   }
 
   return (
     <AuthLayout
-      title="Welcome back"
-      subtitle="Sign in to manage your archive."
-      altText="New to Archive?"
+      title={t('auth.welcomeBack')}
+      subtitle={t('auth.signInSubtitle')}
+      altText={t('auth.newToArchive')}
       altLinkTo="/signup"
-      altLinkLabel="Create an account"
+      altLinkLabel={t('auth.createAccount')}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         <ErrorBanner message={error} />
         <div>
           <label htmlFor="email" className="field-label">
-            Email
+            {t('auth.email')}
           </label>
           <input
             id="email"
@@ -57,12 +58,12 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="field-input"
-            placeholder="you@studio.com"
+            placeholder={t('auth.emailPlaceholder')}
           />
         </div>
         <div>
           <label htmlFor="password" className="field-label">
-            Password
+            {t('auth.password')}
           </label>
           <input
             id="password"
@@ -72,17 +73,17 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="field-input"
-            placeholder="••••••••"
+            placeholder={t('auth.passwordPlaceholder')}
           />
         </div>
         <button type="submit" className="btn-primary w-full" disabled={loading}>
-          {loading ? 'Signing in…' : 'Sign in'}
+          {loading ? t('auth.signingIn') : t('auth.signInBtn')}
         </button>
       </form>
 
       <div className="my-6 flex items-center gap-3">
         <div className="h-px flex-1 bg-ink-200" />
-        <span className="text-[11px] uppercase tracking-widest text-ink-400">or</span>
+        <span className="text-[11px] uppercase tracking-widest text-ink-400">{t('auth.or')}</span>
         <div className="h-px flex-1 bg-ink-200" />
       </div>
 

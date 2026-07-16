@@ -1,18 +1,25 @@
 import { useNavigate } from 'react-router-dom';
+import { useLang } from '../../lib/i18n';
 
 export default function CTA() {
     const navigate = useNavigate();
+    const { t } = useLang();
+
+    const headingLines = t('cta.heading').split('\n');
 
     return (
         <section className="cta">
             <h2>
-                Your archive starts
-                <br />
-                with the first upload.
+                {headingLines.map((line, i) => (
+                    <span key={i}>
+                        {line}
+                        {i < headingLines.length - 1 && <br />}
+                    </span>
+                ))}
             </h2>
-            <p>Free to start. Your data stays yours.</p>
+            <p>{t('cta.body')}</p>
             <button className="primary-btn" onClick={() => navigate('/signup')}>
-                Create your archive
+                {t('cta.button')}
             </button>
         </section>
     );

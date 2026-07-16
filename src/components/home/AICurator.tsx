@@ -1,43 +1,37 @@
 import { Search } from 'lucide-react';
-
-const EXAMPLE_QUERIES = [
-    'quiet, melancholic paintings about migration',
-    'installations exploring memory and place',
-    'early monochrome photography series',
-];
+import { useLang } from '../../lib/i18n';
 
 export default function AICurator() {
+    const { t } = useLang();
+
+    const headingLines = t('ai.heading').split('\n');
+    const queries = [t('ai.query1'), t('ai.query2'), t('ai.query3')];
+
     return (
         <section className="ai-curator">
             <div className="ai-curator-content">
-                <span className="section-number" style={{ color: '#78716c' }}>00 /</span>
-                <span className="section-tag">Semantic search</span>
+                <span className="section-number" style={{ color: '#78716c' }}>{t('ai.sectionNumber')}</span>
+                <span className="section-tag">{t('ai.sectionTag')}</span>
                 <h2>
-                    Search your archive the way you
-                    <br />
-                    actually think about your work.
+                    {headingLines.map((line, i) => (
+                        <span key={i}>
+                            {line}
+                            {i < headingLines.length - 1 && <br />}
+                        </span>
+                    ))}
                 </h2>
-                <p>
-                    Beyond exact keyword matching, describe what you're looking for in
-                    plain language and the archive finds conceptually related work \u2014
-                    even pieces that never used those exact words.
-                </p>
-                <p className="ai-curator-note">
-                    Embeddings are generated locally on your own server \u2014 no artwork
-                    data or curatorial notes are ever sent to a third-party API.
-                </p>
+                <p>{t('ai.body')}</p>
+                <p className="ai-curator-note">{t('ai.note')}</p>
             </div>
 
             <div className="ai-curator-demo">
                 <div className="search-bar-mock">
                     <Search size={16} strokeWidth={1.75} />
-                    <span className="search-placeholder">
-                        Describe what you're looking for&hellip;
-                    </span>
+                    <span className="search-placeholder">{t('ai.placeholder')}</span>
                 </div>
 
                 <div className="query-chips">
-                    {EXAMPLE_QUERIES.map((query) => (
+                    {queries.map((query) => (
                         <span className="query-chip" key={query}>
                             {query}
                         </span>

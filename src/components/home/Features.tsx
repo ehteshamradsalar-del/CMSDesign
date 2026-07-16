@@ -1,50 +1,30 @@
-const FEATURES = [
-    {
-        title: 'Collections & Series',
-        description:
-            'Organize your work into named bodies of work with a statement, a year range, and a fixed media category — the same way you already think about your practice.',
-    },
-    {
-        title: 'Rich Curatorial Metadata',
-        description:
-            'Concepts, themes, techniques, materials and references live alongside every artwork — not bolted on, built in from the start.',
-    },
-    {
-        title: 'Exhibition & Publication History',
-        description:
-            'Structured, queryable records of every show and every publication — not a paragraph buried in a CV file.',
-    },
-    {
-        title: 'Full Visibility Control',
-        description:
-            'Every artwork is public or private, your choice. Curatorial detail stays hidden from public visitors even on public work.',
-    },
-    {
-        title: 'Full-Text & Semantic Search',
-        description:
-            'Find work by exact keyword, or describe what you\u2019re looking for in plain language and let the archive find it for you.',
-    },
-    {
-        title: 'One Archive, Every Purpose',
-        description:
-            'The same canonical data powers your own portfolio and the shared curatorial archive \u2014 upload once, use everywhere.',
-    },
-];
+import { useLang } from '../../lib/i18n';
 
 export default function Features() {
+    const { t } = useLang();
+
+    const features = [
+        { title: t('features.1.title'), desc: t('features.1.desc') },
+        { title: t('features.2.title'), desc: t('features.2.desc') },
+        { title: t('features.3.title'), desc: t('features.3.desc') },
+        { title: t('features.4.title'), desc: t('features.4.desc') },
+        { title: t('features.5.title'), desc: t('features.5.desc') },
+        { title: t('features.6.title'), desc: t('features.6.desc') },
+    ];
+
     return (
         <section className="features" id="features">
             <div className="features-header">
-                <span className="section-number">01 /</span>
-                <span className="section-tag">What you get</span>
-                <h2>Built around how artists actually work</h2>
+                <span className="section-number">{t('features.sectionNumber')}</span>
+                <span className="section-tag">{t('features.sectionTag')}</span>
+                <h2>{t('features.heading')}</h2>
             </div>
 
             <div className="features-grid">
-                {FEATURES.map((feature) => (
+                {features.map((feature) => (
                     <div className="feature-card" key={feature.title}>
                         <h3>{feature.title}</h3>
-                        <p>{feature.description}</p>
+                        <p>{feature.desc}</p>
                     </div>
                 ))}
             </div>
